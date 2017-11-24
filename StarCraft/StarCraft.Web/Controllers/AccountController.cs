@@ -9,7 +9,6 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using StarCraft.Data.Models;
-    using StarCraft.Web.Models;
     using StarCraft.Web.Models.AccountViewModels;
     using StarCraft.Web.Services;
 
@@ -220,7 +219,13 @@
             this.ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User
+                {
+                    UserName = model.Username,
+                    Email = model.Email,
+                    Race = model.Race
+                };
+
                 var result = await this.userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

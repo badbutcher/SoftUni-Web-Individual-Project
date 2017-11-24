@@ -31,6 +31,7 @@
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 6;
             })
                 .AddEntityFrameworkStores<StarCraftDbContext>()
                 .AddDefaultTokenProviders();

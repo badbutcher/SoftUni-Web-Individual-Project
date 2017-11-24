@@ -1,5 +1,62 @@
-﻿@{
-    this.ViewData["Title"] = "Home Page";
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<User> SignInManager
+@{
+    this.ViewData["Title"] = "StarCraft";
 }
 
-<h1>@this.ViewData["Title"]</h1>
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            StarCraft introduced many revolutionary new features that have since become staples of the real-time strategy genre: asymmetric factions, meticulous balance, and a strong emphasis on deep strategy and high accessibility. Find out why, after more than ten years, StarCraft continues to headline gaming tournaments worldwide.
+        </div>
+        <br />
+        <iframe width="480" height="234" src="https://www.youtube.com/embed/H4Z6Rmbtk1k"></iframe>
+    </div>
+    <div class="col-md-6">
+        <section>
+            <form asp-route-returnurl="@this.ViewData["ReturnUrl"]" method="post">
+                <h4>Log in.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Log in</button>
+                </div>
+                <div class="form-group">
+                    @*<p>
+                            <a asp-action="ForgotPassword">Forgot your password?</a>
+                        </p>*@
+                    <p>
+                        <a asp-area="" asp-controller="Account" asp-action="Register">Register if you are new.</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

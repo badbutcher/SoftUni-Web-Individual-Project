@@ -319,7 +319,7 @@
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
 
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User { UserName = model.Email, Email = model.Email, Race = model.Race };
                 var result = await this.userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

@@ -25,6 +25,12 @@
             services.AddDbContext<StarCraftDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
             services.AddIdentity<User, IdentityRole>(opt =>
             {
                 opt.Password.RequireDigit = false;

@@ -11,8 +11,23 @@
         {
         }
 
+        public DbSet<Building> Buildings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<UserBuilding>()
+               .HasKey(a => new { a.UserId, a.BuildingId });
+
+            builder.Entity<User>()
+                .HasMany(a => a.Buildings)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId);
+
+            builder.Entity<Building>()
+                .HasMany(a => a.Users)
+                .WithOne(a => a.Building)
+                .HasForeignKey(a => a.BuildingId);
+
             base.OnModelCreating(builder);
         }
     }

@@ -12,9 +12,10 @@ using System;
 namespace StarCraft.Data.Migrations
 {
     [DbContext(typeof(StarCraftDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171127100748_ResourcesAndBuildings")]
+    partial class ResourcesAndBuildings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,9 +135,11 @@ namespace StarCraft.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("GasCost");
+                    b.Property<int>("GasCost")
+                        .HasMaxLength(2000);
 
-                    b.Property<int>("MineralCost");
+                    b.Property<int>("MineralCost")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -163,13 +166,15 @@ namespace StarCraft.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("Gas");
+                    b.Property<int>("Gas")
+                        .HasMaxLength(1000000);
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<int>("Minerals");
+                    b.Property<int>("Minerals")
+                        .HasMaxLength(1000000);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -183,7 +188,8 @@ namespace StarCraft.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("Race");
+                    b.Property<int>("Race")
+                        .HasMaxLength(20);
 
                     b.Property<string>("SecurityStamp");
 

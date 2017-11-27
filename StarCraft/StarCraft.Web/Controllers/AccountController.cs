@@ -16,6 +16,9 @@
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        private const int StartingMinerals = 250;
+        private const int StartingGas = 0;
+
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IEmailSender emailSender;
@@ -57,7 +60,7 @@
             {
                 // This doesn't count login failures towards account this.Lockout
                 // To enable password failures to trigger account this.Lockout, set lockoutOnFailure: true
-                var result = await this.signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await this.signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");
@@ -223,7 +226,9 @@
                 {
                     UserName = model.Username,
                     Email = model.Email,
-                    Race = model.Race
+                    Race = model.Race,
+                    Minerals = StartingMinerals,
+                    Gas = StartingGas
                 };
 
                 var result = await this.userManager.CreateAsync(user, model.Password);

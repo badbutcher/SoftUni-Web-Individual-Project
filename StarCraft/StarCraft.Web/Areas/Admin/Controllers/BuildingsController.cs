@@ -2,10 +2,13 @@
 {
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using StarCraft.Data;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Web.Areas.Admin.Models.Buildings;
     using StarCraft.Web.Controllers;
+    using StarCraft.Web.Infrastructure.Extensions;
 
     [Area(WebConstats.AdminArea)]
     [Authorize(Roles = WebConstats.AdministratorRole)]
@@ -24,7 +27,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBuilding(CreateBuildingModel buildingsModel)
+        public async Task<IActionResult> CreateBuilding(CreateBuildingModel buildingsModel, IFormFile image)
         {
             bool exists = this.buildings.DoesBuildingExists(buildingsModel.Name, buildingsModel.Race);
 
@@ -38,11 +41,19 @@
                 return this.View(buildingsModel);
             }
 
+            var fileContents = await image.ToByteArrayAsync();
+
+            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            {
+                return this.View(nameof(this.CreateBuilding));
+            }
+
             await this.buildings.CreateBuilding(
                 buildingsModel.Name,
                 buildingsModel.Race,
                 buildingsModel.MineralCost,
-                buildingsModel.GasCost);
+                buildingsModel.GasCost,
+                fileContents);
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }

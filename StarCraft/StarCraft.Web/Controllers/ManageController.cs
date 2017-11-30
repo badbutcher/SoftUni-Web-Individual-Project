@@ -11,7 +11,6 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using StarCraft.Data.Models;
-    using StarCraft.Web.Models;
     using StarCraft.Web.Models.ManageViewModels;
     using StarCraft.Web.Services;
 

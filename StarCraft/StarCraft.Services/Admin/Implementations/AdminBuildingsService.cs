@@ -1,9 +1,6 @@
 ﻿namespace StarCraft.Services.Admin.Implementations
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using StarCraft.Data.Models;
     using StarCraft.Data.Models.Enums;
@@ -19,14 +16,15 @@
             this.db = db;
         }
 
-        public async Task CreateBuilding(string name, Race race, int mineralCost, int gasCost)
+        public async Task CreateBuilding(string name, Race race, int mineralCost, int gasCost, byte[] image)
         {
             Building building = new Building
             {
                 Name = name,
                 Race = race,
                 MineralCost = mineralCost,
-                GasCost = gasCost
+                GasCost = gasCost,
+                Image = image
             };
 
             this.db.Buildings.Add(building);

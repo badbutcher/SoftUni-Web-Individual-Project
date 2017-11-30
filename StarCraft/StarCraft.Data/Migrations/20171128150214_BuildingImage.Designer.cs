@@ -12,9 +12,10 @@ using System;
 namespace StarCraft.Data.Migrations
 {
     [DbContext(typeof(StarCraftDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171128150214_BuildingImage")]
+    partial class BuildingImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

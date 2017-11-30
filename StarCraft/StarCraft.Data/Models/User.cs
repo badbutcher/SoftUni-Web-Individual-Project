@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Identity;
     using StarCraft.Data.Models.Enums;
+    using static DataConstants;
 
     public class User : IdentityUser
     {
@@ -11,11 +12,11 @@
         public Race Race { get; set; }
 
         [Required]
-        [Range(0, 100000)]
+        [Range(MinUserMineralCapacity, MaxUserMineralCapacity)]
         public int Minerals { get; set; }
 
         [Required]
-        [Range(0, 100000)]
+        [Range(MinUserGasCapacity, MaxUserGasCapacity)]
         public int Gas { get; set; }
 
         public List<UserBuilding> Buildings { get; set; } = new List<UserBuilding>();

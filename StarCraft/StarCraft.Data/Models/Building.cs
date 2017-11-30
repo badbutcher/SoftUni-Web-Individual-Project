@@ -1,28 +1,33 @@
 ﻿namespace StarCraft.Data.Models
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
     using StarCraft.Data.Models.Enums;
+    using static DataConstants;
 
     public class Building
     {
         public int Id { get; set; }
 
         [Required]
+        [MinLength(MinBuildingNameLength)]
+        [MaxLength(MaxBuildingNameLength)]
         public string Name { get; set; }
 
         [Required]
         public Race Race { get; set; }
 
         [Required]
-        [Range(50, 2000)]
+        [Range(MinMineralBuildingCost, MaxMineralBuildingCost)]
         public int MineralCost { get; set; }
 
         [Required]
-        [Range(0, 2000)]
+        [Range(MinGasBuildingCost, MaxGasBuildingCost)]
         public int GasCost { get; set; }
+
+        [Required]
+        [MaxLength(MaxByteImageSize)]
+        public byte[] Image { get; set; }
 
         public List<UserBuilding> Users { get; set; } = new List<UserBuilding>();
     }

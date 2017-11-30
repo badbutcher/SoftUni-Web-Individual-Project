@@ -1,5 +1,6 @@
 ﻿namespace StarCraft.Web
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -26,11 +27,11 @@
             services.AddDbContext<StarCraftDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
+            ////services.AddAuthentication().AddFacebook(facebookOptions =>
+            ////{
+            ////    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            ////    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            ////});
 
             services.AddIdentity<User, IdentityRole>(opt =>
             {
@@ -46,6 +47,8 @@
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddDomainServices();
+
+            services.AddAutoMapper();
 
             services.AddMvc(options =>
             {

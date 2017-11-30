@@ -35,6 +35,10 @@
                     {
                         <li><a asp-area="Admin" asp-controller="Buildings" asp-action="CreateBuilding">Add new buildings</a></li>
                     }
+                    else if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="BuyBuilding">Buy new building</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

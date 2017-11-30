@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BasicBuildingInfoServiceModel>
+@{
+    ViewData["Title"] = "Buy Building";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Count() == 0)
+{
+    <h3>No more building to buy</h3>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Mineral cost</th>
+                <th>Gas cost</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var building in Model)
+            {
+                <tr>
+                    <th><img src="data:image;base64,@Convert.ToBase64String(building.Image)" width="100" height="100" /></th>
+                    <td>@building.Name</td>
+                    <td>@building.MineralCost</td>
+                    <td>@building.GasCost</td>
+                    <td>
+                        <form method="post" asp-route-buildingid="@building.Id">
+                            <input type="submit" value="Buy" class="btn btn-success" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

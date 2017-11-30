@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarCraft.Web", "StarCraft.Web\StarCraft.Web.csproj", "{9DD69D83-98DF-4FBD-B38A-FF2F2EE2A942}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarCraft.Web", "StarCraft.Web\StarCraft.Web.csproj", "{9DD69D83-98DF-4FBD-B38A-FF2F2EE2A942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarCraft.Data", "StarCraft.Data\StarCraft.Data.csproj", "{1FAC7D79-DC5D-465B-B8ED-1386B23B4DD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarCraft.Data", "StarCraft.Data\StarCraft.Data.csproj", "{1FAC7D79-DC5D-465B-B8ED-1386B23B4DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarCraft.Services", "StarCraft.Services\StarCraft.Services.csproj", "{65555FC1-D75A-4E29-A8F6-CDA903DD0777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarCraft.Services", "StarCraft.Services\StarCraft.Services.csproj", "{65555FC1-D75A-4E29-A8F6-CDA903DD0777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

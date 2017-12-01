@@ -1,7 +1,6 @@
 ﻿namespace StarCraft.Web.Areas.Admin.Controllers
 {
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data;
@@ -10,9 +9,7 @@
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
 
-    [Area(WebConstats.AdminArea)]
-    [Authorize(Roles = WebConstats.AdministratorRole)]
-    public class BuildingsController : Controller
+    public class BuildingsController : AdminBaseController
     {
         private readonly IAdminBuildingsService buildings;
 
@@ -48,7 +45,7 @@
                 return this.View(nameof(this.CreateBuilding));
             }
 
-            await this.buildings.CreateBuilding(
+            await this.buildings.CreateBuildingAsync(
                 buildingsModel.Name,
                 buildingsModel.Race,
                 buildingsModel.MineralCost,

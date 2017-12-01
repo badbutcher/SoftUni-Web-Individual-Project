@@ -1,6 +1,6 @@
-﻿@model CreateBuildingModel
+﻿@model CreateUnitModel
 @{
-    ViewData["Title"] = "Create Building";
+    ViewData["Title"] = "Create Unit";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -30,12 +30,38 @@
                 <span asp-validation-for="GasCost" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Health"></label>
+                <input asp-for="Health" class="form-control" min="1" max="5000" />
+                <span asp-validation-for="Health" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Damage"></label>
+                <input asp-for="Damage" class="form-control" min="1" max="500" />
+                <span asp-validation-for="Damage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Building"></label>
+                <select name="Building" class="form-control">
+                    @foreach (var race in Model.Buildings)
+                    {
+                        <optgroup label="@race.Key">
+                            @foreach (var building in race.Value)
+                            {
+                                <option value="@building">@building</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+
+                <span asp-validation-for="Building" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Image"></label>
                 <input type="file" name="image" accept=".png" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-default">Add building</button>
+            <button type="submit" class="btn btn-default">Add unit</button>
         </form>
     </div>
 </div>

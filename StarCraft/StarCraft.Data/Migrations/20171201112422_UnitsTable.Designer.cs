@@ -12,9 +12,10 @@ using System;
 namespace StarCraft.Data.Migrations
 {
     [DbContext(typeof(StarCraftDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171201112422_UnitsTable")]
+    partial class UnitsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,19 +195,6 @@ namespace StarCraft.Data.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("StarCraft.Data.Models.UnitUser", b =>
-                {
-                    b.Property<int>("UnitId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("UnitId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UnitUser");
-                });
-
             modelBuilder.Entity("StarCraft.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -332,19 +320,6 @@ namespace StarCraft.Data.Migrations
                     b.HasOne("StarCraft.Data.Models.Unit", "Unit")
                         .WithMany("Buildings")
                         .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("StarCraft.Data.Models.UnitUser", b =>
-                {
-                    b.HasOne("StarCraft.Data.Models.Unit", "Unit")
-                        .WithMany("Users")
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("StarCraft.Data.Models.User", "User")
-                        .WithMany("Units")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

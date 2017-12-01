@@ -20,5 +20,7 @@
         public int Gas { get; set; }
 
         public List<UserBuilding> Buildings { get; set; } = new List<UserBuilding>();
+
+        public List<UnitUser> Units { get; set; } = new List<UnitUser>();
     }
 }

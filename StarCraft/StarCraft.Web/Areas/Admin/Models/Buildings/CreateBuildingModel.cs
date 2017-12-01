@@ -2,27 +2,30 @@
 {
     using System.ComponentModel.DataAnnotations;
     using StarCraft.Data.Models.Enums;
+    using static StarCraft.Data.DataConstants;
 
     public class CreateBuildingModel
     {
         [Required]
+        [MinLength(MinBuildingNameLength)]
+        [MaxLength(MaxBuildingNameLength)]
         public string Name { get; set; }
 
         [Required]
         public Race Race { get; set; }
 
         [Required]
-        [Range(50, 2000)]
+        [Range(MinMineralBuildingCost, MaxMineralBuildingCost)]
         [Display(Name = "Mineral Cost")]
         public int MineralCost { get; set; }
 
         [Required]
-        [Range(0, 2000)]
+        [Range(MinGasBuildingCost, MaxGasBuildingCost)]
         [Display(Name = "Gas Cost")]
         public int GasCost { get; set; }
 
         [Required]
-        [MaxLength(5 * 1024 * 1024)]
+        [MaxLength(MaxByteImageSize)]
         [Display(Name = "Building image")]
         public byte[] Image { get; set; }
     }

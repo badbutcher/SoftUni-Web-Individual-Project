@@ -5,7 +5,7 @@
 
     public interface IAdminBuildingsService
     {
-        Task CreateBuilding(string name, Race race, int mineralCost, int gasCost, byte[] image);
+        Task CreateBuildingAsync(string name, Race race, int mineralCost, int gasCost, byte[] image);
 
         bool DoesBuildingExists(string name, Race race);
     }

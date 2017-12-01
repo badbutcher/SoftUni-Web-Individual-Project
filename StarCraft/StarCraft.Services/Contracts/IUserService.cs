@@ -5,5 +5,7 @@
     public interface IUserService
     {
         Task BuyBuilding(int buildingId, string userId);
+
+        Task BuyUnit(int unitId, string userId);
     }
 }

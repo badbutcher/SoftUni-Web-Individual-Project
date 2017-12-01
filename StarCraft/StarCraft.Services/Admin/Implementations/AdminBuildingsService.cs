@@ -16,7 +16,7 @@
             this.db = db;
         }
 
-        public async Task CreateBuilding(string name, Race race, int mineralCost, int gasCost, byte[] image)
+        public async Task CreateBuildingAsync(string name, Race race, int mineralCost, int gasCost, byte[] image)
         {
             Building building = new Building
             {

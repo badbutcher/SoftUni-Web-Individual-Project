@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
+    using StarCraft.Web.Models.Units;
 
     public class UsersController : Controller
     {
@@ -46,15 +47,18 @@
 
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
 
-            return this.View(units);
+            return this.View(new UnitBuyViewModel
+            {
+                Units = units
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> BuyUnit(int unitId)
+        public async Task<IActionResult> BuyUnit(int unitId, int quantity)
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.BuyUnit(unitId, userId);
+            await this.users.BuyUnit(unitId, userId, 1);
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }

@@ -47,7 +47,7 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task BuyUnit(int unitId, string userId)
+        public async Task BuyUnit(int unitId, string userId, int quantity)
         {
             User user = this.db.Users.FirstOrDefault(a => a.Id == userId);
 
@@ -68,10 +68,18 @@
                 return;
             }
 
-            user.Minerals -= unit.MineralCost;
-            user.Gas -= unit.GasCost;
+            var unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
+            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
 
-            user.Units.Add(new UnitUser { UnitId = unitId, UserId = userId });
+            if (!userUnits.Any()) 
+            {
+                user.Units.Add(new UnitUser { UnitId = unitId, UserId = userId });
+            }
+
+            user.Minerals -= unit.MineralCost * quantity;
+            user.Gas -= unit.GasCost * quantity;
+            unitQuantity.Quantity += quantity;
+
             await this.db.SaveChangesAsync();
         }
     }

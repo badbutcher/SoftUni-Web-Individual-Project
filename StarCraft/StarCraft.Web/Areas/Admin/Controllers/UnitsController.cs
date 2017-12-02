@@ -40,6 +40,7 @@
 
             if (!ModelState.IsValid)
             {
+                // TODO add lists
                 return this.View(unitModel);
             }
 

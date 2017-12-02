@@ -6,6 +6,6 @@
     {
         Task BuyBuilding(int buildingId, string userId);
 
-        Task BuyUnit(int unitId, string userId);
+        Task BuyUnit(int unitId, string userId, int quantity);
     }
 }

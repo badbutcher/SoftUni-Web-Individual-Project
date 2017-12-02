@@ -1,5 +1,6 @@
 ﻿namespace StarCraft.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,15 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.BuyBuilding(buildingId, userId);
+            Tuple<bool, string> success = await this.users.BuyBuildingAsync(buildingId, userId);
 
-            TempData.AddSuccessMessage($"Building bought successfully!");
+            if (!success.Item1)
+            {
+                TempData.AddErrorMessage(success.Item2);
+                return this.RedirectToAction(nameof(UsersController.BuyBuilding));
+            }
+
+            TempData.AddSuccessMessage(success.Item2);
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }
@@ -57,9 +64,15 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.BuyUnit(unitId, userId, quantity);
+            Tuple<bool, string> success = await this.users.BuyUnitAsync(unitId, userId, quantity);
 
-            TempData.AddSuccessMessage($"{quantity} unit/s bought successfully!");
+            if (!success.Item1)
+            {
+                TempData.AddErrorMessage(success.Item2);
+                return this.RedirectToAction(nameof(UsersController.BuyUnit));
+            }
+
+            TempData.AddSuccessMessage(success.Item2);
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }

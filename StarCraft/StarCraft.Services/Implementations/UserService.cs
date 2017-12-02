@@ -1,5 +1,6 @@
 ﻿namespace StarCraft.Services.Implementations
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using StarCraft.Data.Models;
@@ -15,57 +16,67 @@
             this.db = db;
         }
 
-        public async Task BuyBuilding(int buildingId, string userId)
+        public async Task<Tuple<bool, string>> BuyBuildingAsync(int buildingId, string userId)
         {
             User user = this.db.Users.FirstOrDefault(a => a.Id == userId);
 
             if (user == null)
             {
-                return;
+                return this.BadRequest();
             }
 
             Building building = this.db.Buildings.FirstOrDefault(a => a.Id == buildingId);
 
             if (building == null)
             {
-                return;
+                return this.BadRequest();
             }
 
             if (user.Buildings.FirstOrDefault(a => a.BuildingId == buildingId) != null)
             {
-                return;
+                return this.BadRequest(); ///TODO ????
             }
 
-            if (!(user.Minerals >= building.MineralCost && user.Gas >= building.GasCost))
+            if (!(user.Minerals >= building.MineralCost))
             {
-                return;
+                return new Tuple<bool, string>(false, "We require more minerals.");
+            }
+            else if (!(user.Gas >= building.GasCost))
+            {
+                return new Tuple<bool, string>(false, "We require more vespene gas.");
             }
 
             user.Minerals -= building.MineralCost;
             user.Gas -= building.GasCost;
             user.Buildings.Add(new UserBuilding { BuildingId = buildingId, UserId = userId });
             await this.db.SaveChangesAsync();
+
+            return new Tuple<bool, string>(true, $"Building {building.Name} bought successfully!");
         }
 
-        public async Task BuyUnit(int unitId, string userId, int quantity)
+        public async Task<Tuple<bool, string>> BuyUnitAsync(int unitId, string userId, int quantity)
         {
             User user = this.db.Users.FirstOrDefault(a => a.Id == userId);
 
             if (user == null)
             {
-                return;
+                return this.BadRequest();
             }
 
             Unit unit = this.db.Units.FirstOrDefault(a => a.Id == unitId);
 
             if (unit == null)
             {
-                return;
+                return this.BadRequest();
             }
 
-            if (!(user.Minerals >= unit.MineralCost && user.Gas >= unit.GasCost))
+            if (!(user.Minerals >= unit.MineralCost * quantity))
             {
-                return;
+                return new Tuple<bool, string>(false, "We require more minerals.");
+            }
+            else if (!(user.Gas >= unit.GasCost * quantity))
+            {
+                return new Tuple<bool, string>(false, "We require more vespene gas.");
             }
 
             var unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
@@ -83,6 +94,13 @@
             unitQuantity.Quantity += quantity;
 
             await this.db.SaveChangesAsync();
+
+            return new Tuple<bool, string>(true, $"{quantity} unit/s of type {unit.Name} bought successfully!");
+        }
+
+        private Tuple<bool, string> BadRequest()
+        {
+            return new Tuple<bool, string>(false, "Bad Request 404.");
         }
     }
 }

@@ -71,9 +71,11 @@
             var unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
             var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
 
-            if (!userUnits.Any()) 
+            if (!userUnits.Any() || unitQuantity == null)
             {
                 user.Units.Add(new UnitUser { UnitId = unitId, UserId = userId });
+                await this.db.SaveChangesAsync();
+                unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
             }
 
             user.Minerals -= unit.MineralCost * quantity;

@@ -52,6 +52,8 @@
                 buildingsModel.GasCost,
                 fileContents);
 
+            TempData.AddSuccessMessage($"Building {buildingsModel.Name} created successfully!");
+
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }
     }

@@ -40,7 +40,7 @@
 
             if (!ModelState.IsValid)
             {
-                // TODO add lists
+                unitModel.Buildings = this.units.GetAllBuildings();
                 return this.View(unitModel);
             }
 
@@ -60,6 +60,8 @@
                 unitModel.Damage,
                 unitModel.Building,
                 fileContents);
+
+            TempData.AddSuccessMessage($"Unit {unitModel.Name} created successfully!");
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }

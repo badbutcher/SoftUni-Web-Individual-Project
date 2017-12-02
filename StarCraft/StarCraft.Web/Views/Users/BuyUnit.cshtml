@@ -1,4 +1,4 @@
-﻿@model UnitBuyViewModel
+﻿@model IEnumerable<BasicUnitInfoServiceModel>
 @{
     ViewData["Title"] = "Buy Unit";
 }
@@ -14,12 +14,11 @@
             <th>Gas cost</th>
             <th>Health</th>
             <th>Damage</th>
-            <th>Quantity</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var unit in Model.Units)
+        @foreach (var unit in Model)
             {
             <tr>
                 <th><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="100" height="100" /></th>
@@ -29,15 +28,13 @@
                 <td>@unit.Health</td>
                 <td>@unit.Damage</td>
                 <td>
-                    @*<select asp-for="Quantity" class="form-control">
+                    <form method="post" asp-route-unitid="@unit.Id" asp-route-quantity="@unit.Quantity">
+                        <select name="Quantity" class="form-control">
                             <option value="1">1</option>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
-                        </select>*@
-                </td>
-                <td>
-                    <form method="post" asp-route-unitid="@unit.Id">
+                        </select>
                         <input type="submit" value="Buy" class="btn btn-success" />
                     </form>
                 </td>

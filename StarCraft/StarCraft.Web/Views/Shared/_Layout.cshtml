@@ -47,6 +47,20 @@
         </div>
     </nav>
     <div class="container body-content">
+        @if (TempData.ContainsKey(WebConstats.TempDataSuccessMessageKey))
+        {
+            <div class="alert alert-success">
+                @TempData[WebConstats.TempDataSuccessMessageKey]
+            </div>
+        }
+
+        @if (TempData.ContainsKey(WebConstats.TempDataErrorMessageKey))
+        {
+            <div class="alert alert-warning">
+                @TempData[WebConstats.TempDataErrorMessageKey]
+            </div>
+        }
+
         @RenderBody()
         <hr />
         <footer class="text-right">

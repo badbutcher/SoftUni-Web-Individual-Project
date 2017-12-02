@@ -19,5 +19,7 @@
         public int Damage { get; set; }
 
         public byte[] Image { get; set; }
+
+        public string Quantity { get; set; }
     }
 }

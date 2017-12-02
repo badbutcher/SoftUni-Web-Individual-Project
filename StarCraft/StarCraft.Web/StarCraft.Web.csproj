@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Units\" />
     <Folder Include="Models\UsersViewModels\" />
   </ItemGroup>
 

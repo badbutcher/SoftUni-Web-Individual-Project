@@ -25,9 +25,4 @@
     <ProjectReference Include="..\StarCraft.Services\StarCraft.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Units\" />
-    <Folder Include="Models\UsersViewModels\" />
-  </ItemGroup>
-
 </Project>

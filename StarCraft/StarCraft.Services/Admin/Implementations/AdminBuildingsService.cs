@@ -6,6 +6,7 @@
     using StarCraft.Data.Models;
     using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Admin.Contracts;
+    using StarCraft.Services.Models;
     using StarCraft.Web.Data;
 
     public class AdminBuildingsService : IAdminBuildingsService

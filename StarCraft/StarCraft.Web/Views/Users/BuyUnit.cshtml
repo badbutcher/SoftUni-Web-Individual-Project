@@ -1,9 +1,11 @@
-﻿@model IEnumerable<BasicUnitInfoServiceModel>
+﻿@model UserBuyUnitsViewModel
 @{
     ViewData["Title"] = "Buy Unit";
 }
 
 <h2>@ViewData["Title"]</h2>
+
+@await Html.PartialAsync("_UserResources")
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -18,17 +20,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var unit in Model)
+        @foreach (var unit in Model.Units)
             {
             <tr>
-                <th><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="100" height="100" /></th>
-                <td>@unit.Name</td>
-                <td>@unit.MineralCost</td>
-                <td>@unit.GasCost</td>
-                <td>@unit.Health</td>
-                <td>@unit.Damage</td>
-                <td>
-                    <form method="post" asp-route-unitid="@unit.Id" asp-route-quantity="@unit.Quantity">
+                <th class="col-md-1"><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" /></th>
+                <td class="col-md-1">@unit.Name</td>
+                <td class="col-md-1">@unit.MineralCost</td>
+                <td class="col-md-1">@unit.GasCost</td>
+                <td class="col-md-1">@unit.Health</td>
+                <td class="col-md-1">@unit.Damage</td>
+                <td class="col-md-3">
+                    <form method="post" class="form-inline" asp-route-unitid="@unit.Id" asp-route-quantity="@unit.Quantity">
                         <select name="Quantity" class="form-control">
                             <option value="1">1</option>
                             <option value="5">5</option>

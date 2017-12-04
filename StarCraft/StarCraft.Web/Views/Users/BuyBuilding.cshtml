@@ -1,11 +1,13 @@
-﻿@model IEnumerable<BasicBuildingInfoServiceModel>
+﻿@model UserBuyBuildingsViewModel
 @{
     ViewData["Title"] = "Buy Building";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@if (Model.Count() == 0)
+@await Html.PartialAsync("_UserResources")
+
+@if (Model.Buildings.Count() == 0)
 {
     <h3>No more building to buy</h3>
 }
@@ -22,16 +24,16 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var building in Model)
+            @foreach (var building in Model.Buildings)
             {
                 <tr>
-                    <th><img src="data:image;base64,@Convert.ToBase64String(building.Image)" width="100" height="100" /></th>
-                    <td>@building.Name</td>
-                    <td>@building.MineralCost</td>
-                    <td>@building.GasCost</td>
-                    <td>
+                    <td class="col-md-2"><img src="data:image;base64,@Convert.ToBase64String(building.Image)" width="100" height="100" /></td>
+                    <td class="col-md-2">@building.Name</td>
+                    <td class="col-md-2">@building.MineralCost</td>
+                    <td class="col-md-2">@building.GasCost</td>
+                    <td class="col-md-4">
                         <form method="post" asp-route-buildingid="@building.Id">
-                            <input type="submit" value="Buy" class="btn btn-success" />
+                            <input type="submit" value="Buy" class="btn btn-success btn-lg" />
                         </form>
                     </td>
                 </tr>

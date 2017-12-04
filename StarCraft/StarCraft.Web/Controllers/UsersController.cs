@@ -7,6 +7,8 @@
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
     using StarCraft.Web.Infrastructure.Extensions;
+    using StarCraft.Web.Models.Buildings;
+    using StarCraft.Web.Models.Units;
 
     public class UsersController : Controller
     {
@@ -28,8 +30,13 @@
             var user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Race);
-
-            return this.View(buildings);
+            
+            return this.View(new UserBuyBuildingsViewModel
+            {
+                Buildings = buildings,
+                Minerals = user.Minerals,
+                Gas = user.Gas
+            });
         }
 
         [HttpPost]
@@ -56,7 +63,12 @@
 
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
 
-            return this.View(units);
+            return this.View(new UserBuyUnitsViewModel
+            {
+                Units = units,
+                Minerals = user.Minerals,
+                Gas = user.Gas
+            });
         }
 
         [HttpPost]
@@ -75,6 +87,20 @@
             TempData.AddSuccessMessage(success.Item2);
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+        }
+
+        public IActionResult FindRandomPlayer()
+        {
+            var userId = this.userManager.GetUserId(User);
+
+            var asdda = this.users.FindRandomPlayer(userId);
+
+            return this.View();
+        }
+
+        public IActionResult Home()
+        {
+            return this.View();
         }
     }
 }

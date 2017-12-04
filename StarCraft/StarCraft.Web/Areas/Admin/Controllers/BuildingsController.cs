@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data;
+    using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Web.Areas.Admin.Models.Buildings;
     using StarCraft.Web.Controllers;

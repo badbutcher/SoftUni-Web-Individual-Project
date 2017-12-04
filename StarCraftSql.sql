@@ -138,7 +138,6 @@ INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 8)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 9)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 10)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 1)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 1)
 
 -- Zerg units
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, Image)

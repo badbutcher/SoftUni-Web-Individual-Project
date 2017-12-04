@@ -1,11 +1,13 @@
 ﻿namespace StarCraft.Services.Implementations
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
+    using StarCraft.Services.Models;
     using StarCraft.Web.Data;
 
     public class UserService : IUserService
@@ -99,10 +101,28 @@
             return new Tuple<bool, string>(true, $"{quantity} unit/s of type {unit.Name} bought successfully!");
         }
 
+        public async Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnits(string userId)
+        {
+            List<UnitBasicStatsServiceModel> units = new List<UnitBasicStatsServiceModel>();
+            User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
+            foreach (var u in userUnits)
+            {
+                var unit = this.db.Units.FirstOrDefault(a => a.Id == u.UnitId);
+                units.Add(new UnitBasicStatsServiceModel
+                {
+                    Quantity = u.Quantity,
+                    Image = unit.Image
+                });
+            }
+
+            return units;
+        }
+
         public async Task FindRandomPlayer(string userId)
         {
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
-            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).First();
+            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
             int playerTroopsCount = 0;
             int playerTroopsHealth = 0;
             int playerTroopsDamage = 0;
@@ -117,16 +137,31 @@
 
             Console.WriteLine();
 
-            var enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Race != user.Race && 
-            a.Units.Count >= user.Units.Count-1 &&
-            a.Units.Count <= user.Units.Count+1);
+            User enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Race != user.Race &&
+            a.Units.Count >= user.Units.Count - 1 &&
+            a.Units.Count <= user.Units.Count + 1);
 
             if (enemy == null)
             {
                 enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Race != user.Race);
             }
-            
-            //TODO
+
+            int enemyTroopsCount = 0;
+            int enemyTroopsHealth = 0;
+            int enemyTroopsDamage = 0;
+
+            var enemyUnits = this.db.Users.Where(a => a.Id == enemy.Id).Select(c => c.Units).FirstOrDefault();
+            foreach (var item in enemyUnits)
+            {
+                var unit = this.db.Units.FirstOrDefault(a => a.Id == item.UnitId);
+                enemyTroopsCount += item.Quantity;
+                enemyTroopsHealth += unit.Health * item.Quantity;
+                enemyTroopsDamage += unit.Damage * item.Quantity;
+            }
+
+            Console.WriteLine();
+
+            ///TODO
         }
 
         private Tuple<bool, string> BadRequest()

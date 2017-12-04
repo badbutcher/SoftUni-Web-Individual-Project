@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
-
-namespace StarCraft.Data.Migrations
+﻿namespace StarCraft.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class UnitUserUnitQuantity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

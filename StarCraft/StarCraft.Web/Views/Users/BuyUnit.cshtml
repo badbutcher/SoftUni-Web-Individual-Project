@@ -7,6 +7,14 @@
 
 @await Html.PartialAsync("_UserResources")
 
+<div class="row text-center">
+    <div class="col-lg@((Model.BoughtUnits.Count()-12)/2)"></div>
+    @foreach (var unit in Model.BoughtUnits)
+    {
+        <div class="col-lg-1"><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" />@unit.Quantity</div>
+    }
+</div>
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>

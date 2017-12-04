@@ -2,14 +2,16 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
     using StarCraft.Web.Infrastructure.Extensions;
     using StarCraft.Web.Models.Buildings;
-    using StarCraft.Web.Models.Units;
+    using StarCraft.Web.Models.UsersViewModels;
 
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IUserService users;
@@ -30,7 +32,7 @@
             var user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Race);
-            
+
             return this.View(new UserBuyBuildingsViewModel
             {
                 Buildings = buildings,
@@ -62,12 +64,14 @@
             var user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
+            var userUnits = await this.users.GetUserUnits(user.Id);
 
             return this.View(new UserBuyUnitsViewModel
             {
                 Units = units,
                 Minerals = user.Minerals,
-                Gas = user.Gas
+                Gas = user.Gas,
+                BoughtUnits = userUnits
             });
         }
 
@@ -89,11 +93,11 @@
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }
 
-        public IActionResult FindRandomPlayer()
+        public async Task<IActionResult> FindRandomPlayer()
         {
             var userId = this.userManager.GetUserId(User);
 
-            var asdda = this.users.FindRandomPlayer(userId);
+            await this.users.FindRandomPlayer(userId);
 
             return this.View();
         }

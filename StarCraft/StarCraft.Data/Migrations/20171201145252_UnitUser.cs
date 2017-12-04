@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace StarCraft.Data.Migrations
+﻿namespace StarCraft.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class UnitUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,15 +1,12 @@
-﻿namespace StarCraft.Web.Models.Units
+﻿namespace StarCraft.Web.Models.UsersViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Models;
-    using StarCraft.Web.Models.UsersViewModels;
 
     public class UserBuyUnitsViewModel : UsersResources
     {
         public IEnumerable<BasicUnitInfoServiceModel> Units { get; set; }
+
+        public IEnumerable<UnitBasicStatsServiceModel> BoughtUnits { get; set; }
     }
 }

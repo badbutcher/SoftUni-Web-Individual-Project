@@ -11,6 +11,7 @@
     using StarCraft.Data.Models;
     using StarCraft.Web.Models.AccountViewModels;
     using StarCraft.Web.Services;
+    using static StarCraft.Data.DataConstants;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -227,8 +228,10 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = StartingMinerals,
-                    Gas = StartingGas
+                    Minerals = 5000000, /// TODO
+                    Gas = 5000000, /// TODO
+                    Level = UserStartLevel,
+                    CurrentExp = UserStartExp
                 };
 
                 var result = await this.userManager.CreateAsync(user, model.Password);
@@ -247,8 +250,7 @@
 
                 this.AddErrors(result);
             }
-
-            // If we got this far, something failed, redisplay form
+            
             return this.View(model);
         }
 

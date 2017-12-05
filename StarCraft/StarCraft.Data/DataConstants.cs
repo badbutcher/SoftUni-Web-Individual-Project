@@ -23,6 +23,28 @@
         public const int MinUserGasCapacity = 0;
         public const int MaxUserGasCapacity = 100000;
 
+        public const int ExpForLevelTwo = 150;
+        public const int ExpForLevelThree = 250;
+        public const int ExpForLevelFour = 400;
+        public const int ExpForLevelFive = 600;
+        public const int ExpForLevelSix = 850;
+        public const int ExpForLevelSeven = 1150;
+        public const int ExpForLevelEight = 1500;
+        public const int ExpForLevelNine = 2000;
+        public const int ExpForLevelTen = 3000;
+
+        public const int UserStartExp = 0;
+        public const int UserStartLevel = 0;
+
+        public const int UserMinExp = 0;
+        public const int UserMaxExp = 1000;
+
+        public const int UserMinLevel = 0;
+        public const int UserMaxLevel = 11;
+
+        public const int UserStartingMinerals = 250;
+        public const int UserStartingGas = 0;
+
         // Unit constats
         public const int MinUnitNameLenght = 3;
 

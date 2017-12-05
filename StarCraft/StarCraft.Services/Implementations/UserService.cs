@@ -83,7 +83,7 @@
             }
 
             var unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
-            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
+            var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
 
             if (!userUnits.Any() || unitQuantity == null)
             {
@@ -105,7 +105,7 @@
         {
             List<UnitBasicStatsServiceModel> units = new List<UnitBasicStatsServiceModel>();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
-            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
+            var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
             foreach (var u in userUnits)
             {
                 var unit = this.db.Units.FirstOrDefault(a => a.Id == u.UnitId);
@@ -121,47 +121,86 @@
 
         public async Task FindRandomPlayer(string userId)
         {
+            Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
-            var userUnits = this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefault();
-            int playerTroopsCount = 0;
-            int playerTroopsHealth = 0;
-            int playerTroopsDamage = 0;
 
-            foreach (var item in userUnits)
+            var enemies = await this.db.Users
+                .Where(a => a.Race != user.Race &&
+                a.Level >= user.Level - 1 &&
+                a.Level <= user.Level + 1)
+                .Take(10)
+                .ToListAsync();
+
+            User enemy = enemies[r.Next(0, enemies.Count)];
+
+            List<UnitUser> userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
+            List<UnitUser> enemyUnits = await this.db.Users.Where(a => a.Id == enemy.Id).Select(c => c.Units).FirstOrDefaultAsync();
+
+            await GetUnits(userUnits);
+            await GetUnits(enemyUnits);
+            if (userUnits.Count >= enemyUnits.Count)
             {
-                var unit = this.db.Units.FirstOrDefault(a => a.Id == item.UnitId);
-                playerTroopsCount += item.Quantity;
-                playerTroopsHealth += unit.Health * item.Quantity;
-                playerTroopsDamage += unit.Damage * item.Quantity;
+                StartBattle(userUnits, enemyUnits);
+            }
+            else if (userUnits.Count < enemyUnits.Count)
+            {
+                StartBattle(enemyUnits, userUnits);
+            }
+        }
+
+        private void StartBattle(List<UnitUser> attacker, List<UnitUser> defender)
+        {
+            int totalAttackerHealth = attacker.Sum(a => a.Unit.Health * a.Quantity);
+            int totalAttackerDamage = attacker.Sum(a => a.Unit.Damage * a.Quantity);
+
+            int totalDefenderHealth = defender.Sum(a => a.Unit.Health * a.Quantity);
+            int totalDefenderDamage = defender.Sum(a => a.Unit.Damage * a.Quantity);
+
+            //totalAttackerHealth -= totalDefenderDamage;
+            //totalDefenderHealth -= totalAttackerDamage;
+
+            foreach (var attackerUnit in attacker)
+            {
+                int maxHealth = attackerUnit.Unit.Health * attackerUnit.Quantity;
+                int maxDmg = attackerUnit.Unit.Damage * attackerUnit.Quantity;
+                var currentAttackingUnitHealth = attackerUnit.Unit.Health * attackerUnit.Quantity;
+                var currentAttackingUnitDamage = attackerUnit.Unit.Damage * attackerUnit.Quantity;
+
+                foreach (var defenderUnit in defender)
+                {
+                    var currentDefendingUnitHealth = defenderUnit.Unit.Health * defenderUnit.Quantity;
+                    var currentDefendingUnitDamage = defenderUnit.Unit.Damage * defenderUnit.Quantity;
+
+                    currentAttackingUnitHealth -= currentDefendingUnitDamage;
+                    currentDefendingUnitHealth -= currentAttackingUnitDamage;
+
+                    attackerUnit.Quantity -= (int)Math.Ceiling((double)currentDefendingUnitDamage / attackerUnit.Unit.Health); /// TODO FIX formula
+                    defenderUnit.Quantity -= (int)Math.Ceiling((double)currentAttackingUnitDamage / defenderUnit.Unit.Health); /// TODO FIX formula
+
+                    if (attackerUnit.Quantity <= 0)
+                    {
+                        attackerUnit.Quantity = 0;
+                        break;
+                    }
+                    else if (defenderUnit.Quantity <= 0)
+                    {
+                        defenderUnit.Quantity = 0;
+                        break;
+                    }
+
+                    this.db.SaveChangesAsync();
+                }
             }
 
             Console.WriteLine();
+        }
 
-            User enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Race != user.Race &&
-            a.Units.Count >= user.Units.Count - 1 &&
-            a.Units.Count <= user.Units.Count + 1);
-
-            if (enemy == null)
+        private async Task GetUnits(List<UnitUser> userUnits)
+        {
+            foreach (var unit in userUnits)
             {
-                enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Race != user.Race);
+                Unit userUnit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == unit.UnitId);
             }
-
-            int enemyTroopsCount = 0;
-            int enemyTroopsHealth = 0;
-            int enemyTroopsDamage = 0;
-
-            var enemyUnits = this.db.Users.Where(a => a.Id == enemy.Id).Select(c => c.Units).FirstOrDefault();
-            foreach (var item in enemyUnits)
-            {
-                var unit = this.db.Units.FirstOrDefault(a => a.Id == item.UnitId);
-                enemyTroopsCount += item.Quantity;
-                enemyTroopsHealth += unit.Health * item.Quantity;
-                enemyTroopsDamage += unit.Damage * item.Quantity;
-            }
-
-            Console.WriteLine();
-
-            ///TODO
         }
 
         private Tuple<bool, string> BadRequest()

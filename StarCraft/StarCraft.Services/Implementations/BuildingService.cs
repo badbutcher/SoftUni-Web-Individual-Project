@@ -19,10 +19,10 @@
             this.db = db;
         }
 
-        public async Task<IEnumerable<BasicBuildingInfoServiceModel>> AllBuildingsAsync(string userId, Race userRace)
+        public async Task<IEnumerable<BasicBuildingInfoServiceModel>> AllBuildingsAsync(string userId, int userLevel, Race userRace)
         {
             var buildings = await this.db.Buildings
-                .Where(r => r.Race == userRace)
+                .Where(r => r.Race == userRace && r.UnlockLevel <= userLevel)
                 .Where(a => a.Users.All(c => !c.UserId.Equals(userId)))
                 .ProjectTo<BasicBuildingInfoServiceModel>()
                 .ToListAsync();

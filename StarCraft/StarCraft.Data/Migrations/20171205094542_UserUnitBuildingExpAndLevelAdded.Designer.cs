@@ -12,9 +12,10 @@ using System;
 namespace StarCraft.Data.Migrations
 {
     [DbContext(typeof(StarCraftDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171205094542_UserUnitBuildingExpAndLevelAdded")]
+    partial class UserUnitBuildingExpAndLevelAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

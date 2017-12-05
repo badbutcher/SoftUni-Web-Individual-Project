@@ -31,7 +31,7 @@
         {
             var user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
-            var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Race);
+            var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Level, user.Race);
 
             return this.View(new UserBuyBuildingsViewModel
             {

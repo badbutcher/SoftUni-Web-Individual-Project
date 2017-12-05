@@ -18,6 +18,12 @@
         public Race Race { get; set; }
 
         [Required]
+        public int UnlockLevel { get; set; }
+
+        [Required]
+        public int ExpWorth { get; set; }
+
+        [Required]
         [Range(MinMineralUnitCost, MaxMineralUnitCost)]
         public int MineralCost { get; set; }
 

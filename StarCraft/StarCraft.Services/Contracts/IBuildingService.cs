@@ -7,6 +7,6 @@
 
     public interface IBuildingService
     {
-        Task<IEnumerable<BasicBuildingInfoServiceModel>> AllBuildingsAsync(string userId, Race userRace);
+        Task<IEnumerable<BasicBuildingInfoServiceModel>> AllBuildingsAsync(string userId, int userLevel, Race userRace);
     }
 }

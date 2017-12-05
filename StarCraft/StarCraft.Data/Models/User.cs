@@ -8,6 +8,12 @@
 
     public class User : IdentityUser
     {
+        [Range(UserMinLevel, UserMaxLevel)]
+        public int Level { get; set; }
+
+        [Range(UserMinExp, UserMaxLevel)]
+        public int CurrentExp { get; set; }
+
         [Required]
         public Race Race { get; set; }
 

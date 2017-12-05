@@ -18,6 +18,9 @@
         public Race Race { get; set; }
 
         [Required]
+        public int UnlockLevel { get; set; }
+
+        [Required]
         [Range(MinMineralBuildingCost, MaxMineralBuildingCost)]
         public int MineralCost { get; set; }
 

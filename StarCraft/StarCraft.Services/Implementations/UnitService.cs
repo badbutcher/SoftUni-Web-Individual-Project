@@ -23,11 +23,11 @@
             var user = this.db.Users.FirstOrDefault(a => a.Id == userId);
 
             List<int> userBuildings = await this.db.UserBuilding
-                .Where(a => a.UserId == userId /*&& a.Building.Race == race*/)
+                .Where(a => a.UserId == userId/*&& a.Building.Race == race*/)
                 .Select(a => a.Building.Id).ToListAsync();
 
             var userUnits = await this.db.BuildingUnit
-                .Where(a => userBuildings.Contains(a.BuildingId))
+                .Where(a => userBuildings.Contains(a.BuildingId) && a.Unit.UnlockLevel <= user.Level)
                 .Select(d => new BasicUnitInfoServiceModel
                 {
                     Id = d.UnitId,

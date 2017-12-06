@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
+    using StarCraft.Services.Models;
     using StarCraft.Web.Infrastructure.Extensions;
     using StarCraft.Web.Models.Buildings;
     using StarCraft.Web.Models.UsersViewModels;
@@ -97,7 +98,25 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.FindRandomPlayer(userId);
+            var enemy = await this.users.FindRandomPlayer(userId);
+
+            if (enemy == null)
+            {
+                TempData.AddErrorMessage("No enemies found for you. Please try again later.");
+                return this.View(new UserInfoBattleServiceModel
+                {
+                    ArmyQuantity = 0
+                });
+            }
+
+            return this.View(enemy);
+        }
+
+        public async Task<IActionResult> BattleEnemy(string enemyId)
+        {
+            var userId = this.userManager.GetUserId(User);
+
+            await this.users.BattleEnemy(userId, enemyId);
 
             return this.View();
         }

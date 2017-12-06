@@ -1,0 +1,34 @@
+﻿@model UserInfoBattleServiceModel
+@{
+    ViewData["Title"] = "Random Player";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (@Model.ArmyQuantity == 0)
+{
+    <div>No enemies found for you. Please try again later.</div>
+}
+else
+{
+    <div>
+        Enemy name: @Model.UserName
+    </div>
+
+    <div>
+        Enemy level: @Model.Level
+    </div>
+
+    <div>
+        Race: @Model.Race
+    </div>
+
+    <div>
+        Total army count: @Model.ArmyQuantity
+    </div>
+
+    <form method="post" asp-action="BattleEnemy" asp-route-enemyid="@Model.Id">
+        <button type="submit" class="btn btn-success">Battle Enemy</button>
+    </form>
+
+}

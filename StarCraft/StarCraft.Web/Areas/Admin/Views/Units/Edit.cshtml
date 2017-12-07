@@ -1,9 +1,9 @@
-﻿@model CreateBuildingModel
+﻿@model EditUnitModel
 @{
-    ViewData["Title"] = "Create Building";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>Edit</h2>
 
 <div class="row">
     <div class="col-md-4">
@@ -15,14 +15,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Race"></label>
-                <select asp-for="Race" asp-items="@Html.GetEnumSelectList<Race>()" class="form-control"></select>
-                <span asp-validation-for="Race" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="UnlockLevel"></label>
                 <input asp-for="UnlockLevel" class="form-control" min="1" max="10" />
                 <span asp-validation-for="UnlockLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpWorth"></label>
+                <input asp-for="ExpWorth" class="form-control" min="1" max="50" />
+                <span asp-validation-for="ExpWorth" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MineralCost"></label>
@@ -35,12 +35,22 @@
                 <span asp-validation-for="GasCost" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Health"></label>
+                <input asp-for="Health" class="form-control" min="1" max="5000" />
+                <span asp-validation-for="Health" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Damage"></label>
+                <input asp-for="Damage" class="form-control" min="1" max="500" />
+                <span asp-validation-for="Damage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Image"></label>
                 <input type="file" name="image" accept=".png" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-default">Add building</button>
+            <button type="submit" class="btn btn-default">Edit unit</button>
         </form>
     </div>
 </div>

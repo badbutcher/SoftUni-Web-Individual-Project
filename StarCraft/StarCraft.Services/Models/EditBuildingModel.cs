@@ -1,22 +1,14 @@
-﻿namespace StarCraft.Web.Areas.Admin.Models.Buildings
+﻿namespace StarCraft.Services.Models
 {
     using System.ComponentModel.DataAnnotations;
-    using StarCraft.Data.Models.Enums;
     using static StarCraft.Data.DataConstants;
 
-    public class CreateBuildingModel
+    public class EditBuildingModel
     {
         [Required]
         [MinLength(MinBuildingNameLength)]
         [MaxLength(MaxBuildingNameLength)]
         public string Name { get; set; }
-
-        [Required]
-        public Race Race { get; set; }
-
-        [Required]
-        [Range(MinItemUnlockLevel, MaxItemUnlockLevel)]
-        public int UnlockLevel { get; set; }
 
         [Required]
         [Range(MinMineralBuildingCost, MaxMineralBuildingCost)]

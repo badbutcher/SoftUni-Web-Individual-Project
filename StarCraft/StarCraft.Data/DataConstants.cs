@@ -2,6 +2,9 @@
 {
     public static class DataConstants
     {
+        public const int MinItemUnlockLevel = 1;
+        public const int MaxItemUnlockLevel = 10;
+
         public const int MaxByteImageSize = 5 * 1024 * 1024;
 
         // Building constants
@@ -61,5 +64,8 @@
 
         public const int MinUnitDamage = 1;
         public const int MaxUnitDamage = 500;
+
+        public const int MinUnitExpWorth = 1;
+        public const int MaxUnitExpWorth = 50;
     }
 }

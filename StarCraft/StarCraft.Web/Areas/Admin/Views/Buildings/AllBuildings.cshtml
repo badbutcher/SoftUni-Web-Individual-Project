@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BasicBuildingInfoServiceModel>
+
+@{
+    ViewData["Title"] = "AllBuildings";
+}
+
+<h2>AllBuildings</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Mineral cost</th>
+            <th>Gas cost</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var building in Model)
+        {
+            <tr>
+                <td class="col-md-2"><img src="data:image;base64,@Convert.ToBase64String(building.Image)" width="100" height="100" /></td>
+                <td class="col-md-2">@building.Name</td>
+                <td class="col-md-2">@building.MineralCost</td>
+                <td class="col-md-2">@building.GasCost</td>
+                <td class="col-md-4">
+                    <form method="get">
+                        <input type="submit" value="Edit" asp-action="Edit" asp-route-id="@building.Id" class="btn btn-success btn-lg" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

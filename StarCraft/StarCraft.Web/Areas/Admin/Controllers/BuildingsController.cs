@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using StarCraft.Data;
     using StarCraft.Services.Admin.Contracts;
+    using StarCraft.Services.Models;
     using StarCraft.Web.Areas.Admin.Models.Buildings;
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
@@ -18,6 +19,13 @@
             this.buildings = buildings;
         }
 
+        public async Task<IActionResult> AllBuildings()
+        {
+            var result = await this.buildings.AllBuildingsAsync();
+
+            return this.View(result);
+        }
+
         public IActionResult CreateBuilding()
         {
             return this.View();
@@ -26,7 +34,7 @@
         [HttpPost]
         public async Task<IActionResult> CreateBuilding(CreateBuildingModel buildingsModel, IFormFile image)
         {
-            bool exists = this.buildings.DoesBuildingExists(buildingsModel.Name, buildingsModel.Race);
+            bool exists = await this.buildings.DoesBuildingExistsAsync(buildingsModel.Name, buildingsModel.Race);
 
             if (!exists)
             {
@@ -48,6 +56,7 @@
             await this.buildings.CreateBuildingAsync(
                 buildingsModel.Name,
                 buildingsModel.Race,
+                buildingsModel.UnlockLevel,
                 buildingsModel.MineralCost,
                 buildingsModel.GasCost,
                 fileContents);
@@ -55,6 +64,52 @@
             TempData.AddSuccessMessage($"Building {buildingsModel.Name} created successfully!");
 
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var building = await this.buildings.FindByIdAsync(id);
+
+            if (building == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            return this.View(new EditBuildingModel
+            {
+                Name = building.Name,
+                MineralCost = building.MineralCost,
+                GasCost = building.GasCost
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditBuildingModel model, IFormFile image)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var building = this.buildings.FindByIdAsync(id);
+
+            if (building == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            var fileContents = await image.ToByteArrayAsync();
+
+            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            {
+                return this.View(nameof(this.CreateBuilding));
+            }
+
+            await this.buildings.EditAsync(id, model.Name, model.MineralCost, model.GasCost, fileContents);
+
+            return this.RedirectToAction(nameof(this.AllBuildings));
         }
     }
 }

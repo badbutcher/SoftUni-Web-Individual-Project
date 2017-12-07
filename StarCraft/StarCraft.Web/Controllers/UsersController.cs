@@ -65,7 +65,7 @@
             var user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
-            var userUnits = await this.users.GetUserUnits(user.Id);
+            var userUnits = await this.users.GetUserUnitsAsync(user.Id);
 
             return this.View(new UserBuyUnitsViewModel
             {
@@ -98,7 +98,7 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            var enemy = await this.users.FindRandomPlayer(userId);
+            var enemy = await this.users.FindRandomPlayerAsync(userId);
 
             if (enemy == null)
             {
@@ -116,7 +116,7 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.BattleEnemy(userId, enemyId);
+            await this.users.BattleEnemyAsync(userId, enemyId);
 
             return this.View();
         }

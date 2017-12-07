@@ -103,14 +103,14 @@
             return new Tuple<bool, string>(true, $"{quantity} unit/s of type {unit.Name} bought successfully!");
         }
 
-        public async Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnits(string userId)
+        public async Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnitsAsync(string userId)
         {
             List<UnitBasicStatsServiceModel> units = new List<UnitBasicStatsServiceModel>();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
             var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
             foreach (var u in userUnits)
             {
-                var unit = this.db.Units.FirstOrDefault(a => a.Id == u.UnitId);
+                var unit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == u.UnitId);
                 units.Add(new UnitBasicStatsServiceModel
                 {
                     Quantity = u.Quantity,
@@ -121,7 +121,7 @@
             return units;
         }
 
-        public async Task<UserInfoBattleServiceModel> FindRandomPlayer(string userId)
+        public async Task<UserInfoBattleServiceModel> FindRandomPlayerAsync(string userId)
         {
             Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -146,7 +146,7 @@
             return enemy;
         }
 
-        public async Task BattleEnemy(string userId, string enemyId)
+        public async Task BattleEnemyAsync(string userId, string enemyId)
         {
             Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -168,7 +168,7 @@
 
         private async Task LevelUp(User user)
         {
-            if ((typeof(DataConstants)).GetField("ExpForLevel" + user.Level) != null)
+            if (typeof(DataConstants).GetField("ExpForLevel" + user.Level) != null)
             {
                 int value = (int)typeof(DataConstants).GetField("ExpForLevel" + user.Level).GetValue(null);
                 if (user.CurrentExp >= value)

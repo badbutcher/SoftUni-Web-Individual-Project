@@ -11,10 +11,10 @@
 
         Task<Tuple<bool, string>> BuyUnitAsync(int unitId, string userId, int quantity);
 
-        Task<UserInfoBattleServiceModel> FindRandomPlayer(string userId);
+        Task<UserInfoBattleServiceModel> FindRandomPlayerAsync(string userId);
 
-        Task BattleEnemy(string userId, string enemyId);
+        Task BattleEnemyAsync(string userId, string enemyId);
 
-        Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnits(string id);
+        Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnitsAsync(string id);
     }
 }

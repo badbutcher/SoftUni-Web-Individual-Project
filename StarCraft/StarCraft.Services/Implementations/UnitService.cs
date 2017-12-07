@@ -20,7 +20,7 @@
 
         public async Task<IEnumerable<BasicUnitInfoServiceModel>> AllUnitsAsync(string userId, Race race)
         {
-            var user = this.db.Users.FirstOrDefault(a => a.Id == userId);
+            var user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
             List<int> userBuildings = await this.db.UserBuilding
                 .Where(a => a.UserId == userId/*&& a.Building.Race == race*/)

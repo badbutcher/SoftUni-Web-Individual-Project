@@ -33,6 +33,8 @@
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
                     @if (User.IsInRole(WebConstats.AdministratorRole))
                     {
+                        <li><a asp-area="Admin" asp-controller="Buildings" asp-action="AllBuildings">All buildings</a></li>
+                        <li><a asp-area="Admin" asp-controller="Units" asp-action="AllUnits">All units</a></li>
                         <li><a asp-area="Admin" asp-controller="Buildings" asp-action="CreateBuilding">Add new buildings</a></li>
                         <li><a asp-area="Admin" asp-controller="Units" asp-action="CreateUnit">Add new unit</a></li>
                     }

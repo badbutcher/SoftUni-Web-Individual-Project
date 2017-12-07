@@ -1,6 +1,6 @@
-﻿@model CreateBuildingModel
+﻿@model EditBuildingModel
 @{
-    ViewData["Title"] = "Create Building";
+    ViewData["Title"] = "Edit Building";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -13,16 +13,6 @@
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Race"></label>
-                <select asp-for="Race" asp-items="@Html.GetEnumSelectList<Race>()" class="form-control"></select>
-                <span asp-validation-for="Race" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnlockLevel"></label>
-                <input asp-for="UnlockLevel" class="form-control" min="1" max="10" />
-                <span asp-validation-for="UnlockLevel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MineralCost"></label>
@@ -40,7 +30,7 @@
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-default">Add building</button>
+            <button type="submit" class="btn btn-default">Edit building</button>
         </form>
     </div>
 </div>

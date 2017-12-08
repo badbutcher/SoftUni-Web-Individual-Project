@@ -37,9 +37,11 @@
                 return this.BadRequest();
             }
 
-            if (user.Buildings.FirstOrDefault(a => a.BuildingId == buildingId) != null)
+            var usersBuildings = this.db.UserBuilding.Where(a => a.UserId == userId);
+
+            if (usersBuildings.Any(a => a.BuildingId == buildingId))
             {
-                return this.BadRequest(); ///TODO ????
+                return this.BadRequest();
             }
 
             if (!(user.Minerals >= building.MineralCost))
@@ -146,7 +148,7 @@
             return enemy;
         }
 
-        public async Task BattleEnemyAsync(string userId, string enemyId)
+        public async Task<BattleResultServiceModel> BattleEnemyAsync(string userId, string enemyId)
         {
             Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -158,49 +160,26 @@
 
             await this.GetUnits(userUnits);
             await this.GetUnits(enemyUnits);
-            var battle = this.StartBattle(userUnits, enemyUnits);
-            user.CurrentExp += battle.Result.Item1;
-            enemy.CurrentExp += battle.Result.Item2;
+            var battle = await this.StartBattle(userUnits, enemyUnits); //// TODOTODO
+            user.CurrentExp += battle.UserXpWon;
+            enemy.CurrentExp += battle.EnemyXpWon;
             await this.LevelUp(user);
             await this.LevelUp(enemy);
             await this.db.SaveChangesAsync();
+
+            return battle;
         }
 
-        private async Task LevelUp(User user)
+        private async Task<BattleResultServiceModel> StartBattle(List<UnitUser> attacker, List<UnitUser> defender)
         {
-            if (typeof(DataConstants).GetField("ExpForLevel" + user.Level) != null)
-            {
-                int value = (int)typeof(DataConstants).GetField("ExpForLevel" + user.Level).GetValue(null);
-                if (user.CurrentExp >= value)
-                {
-                    user.CurrentExp = 0;
-                    user.Level++;
-                    await this.db.SaveChangesAsync();
-                }
-            }
-        }
-
-        private async Task<Tuple<int, int>> StartBattle(List<UnitUser> attacker, List<UnitUser> defender)
-        {
-            int totalAttackerHealth = attacker.Sum(a => a.Unit.Health * a.Quantity);
-            int totalAttackerDamage = attacker.Sum(a => a.Unit.Damage * a.Quantity);
-
-            int totalDefenderHealth = defender.Sum(a => a.Unit.Health * a.Quantity);
-            int totalDefenderDamage = defender.Sum(a => a.Unit.Damage * a.Quantity);
-
-            ////totalAttackerHealth -= totalDefenderDamage;
-            ////totalDefenderHealth -= totalAttackerDamage;
-            int userXpWon = 0;
-            int enemyXpWon = 0;
+            BattleResultServiceModel result = new BattleResultServiceModel();
 
             foreach (var attackerUnit in attacker.Where(a => a.Quantity >= 1))
             {
-                int maxHealth = attackerUnit.Unit.Health * attackerUnit.Quantity;
-                int maxDmg = attackerUnit.Unit.Damage * attackerUnit.Quantity;
                 var currentAttackingUnitHealth = attackerUnit.Unit.Health * attackerUnit.Quantity;
                 var currentAttackingUnitDamage = attackerUnit.Unit.Damage * attackerUnit.Quantity;
 
-                foreach (var defenderUnit in defender.Where(a => a.Quantity > 1))
+                foreach (var defenderUnit in defender.Where(a => a.Quantity >= 1))
                 {
                     var currentDefendingUnitHealth = defenderUnit.Unit.Health * defenderUnit.Quantity;
                     var currentDefendingUnitDamage = defenderUnit.Unit.Damage * defenderUnit.Quantity;
@@ -214,8 +193,8 @@
                     attackerUnit.Quantity -= (int)Math.Ceiling((double)currentDefendingUnitDamage / attackerUnit.Unit.Health);
                     defenderUnit.Quantity -= (int)Math.Ceiling((double)currentAttackingUnitDamage / defenderUnit.Unit.Health);
 
-                    userXpWon += (currentDefenderUnitCount - defenderUnit.Quantity) * defenderUnit.Unit.ExpWorth;
-                    enemyXpWon += (currentAttackingUnitCount - attackerUnit.Quantity) * attackerUnit.Unit.ExpWorth;
+                    result.UserXpWon += (currentDefenderUnitCount - defenderUnit.Quantity) * defenderUnit.Unit.ExpWorth;
+                    result.EnemyXpWon += (currentAttackingUnitCount - attackerUnit.Quantity) * attackerUnit.Unit.ExpWorth;
 
                     if (attackerUnit.Quantity <= 0)
                     {
@@ -234,7 +213,21 @@
                 }
             }
 
-            return new Tuple<int, int>(userXpWon, enemyXpWon);
+            return result;
+        }
+
+        private async Task LevelUp(User user)
+        {
+            if (typeof(DataConstants).GetField("ExpForLevel" + user.Level) != null)
+            {
+                int value = (int)typeof(DataConstants).GetField("ExpForLevel" + user.Level).GetValue(null);
+                if (user.CurrentExp >= value)
+                {
+                    user.CurrentExp = 0;
+                    user.Level++;
+                    await this.db.SaveChangesAsync();
+                }
+            }
         }
 
         private async Task GetUnits(List<UnitUser> userUnits)
@@ -244,7 +237,7 @@
                 Unit userUnit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == unit.UnitId);
             }
         }
-
+        
         private Tuple<bool, string> BadRequest()
         {
             return new Tuple<bool, string>(false, "Bad Request 404.");

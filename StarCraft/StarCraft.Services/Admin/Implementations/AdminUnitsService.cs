@@ -58,6 +58,14 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == id);
+
+            this.db.Units.Remove(unit);
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<bool> DoesUnitExistsAsync(string name, Race race)
         {
             Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower() && a.Race == race);
@@ -91,11 +99,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<EditUnitModel> FindByIdAsync(int id)
+        public async Task<UnitServiceModel> FindByIdAsync(int id)
         {
             var result = await this.db.Units
                .Where(c => c.Id == id)
-               .ProjectTo<EditUnitModel>()
+               .ProjectTo<UnitServiceModel>()
                .FirstOrDefaultAsync();
 
             return result;
@@ -108,7 +116,7 @@
             buildings.Add(Race.Terran, await this.db.Buildings.Where(a => a.Race == Race.Terran).Select(c => c.Name).ToListAsync());
             buildings.Add(Race.Zerg, await this.db.Buildings.Where(a => a.Race == Race.Zerg).Select(c => c.Name).ToListAsync());
             buildings.Add(Race.Protoss, await this.db.Buildings.Where(a => a.Race == Race.Protoss).Select(c => c.Name).ToListAsync());
-            /// TODO: is there a better way?
+            /// TODOTODO: is there a better way?
 
             return buildings;
         }

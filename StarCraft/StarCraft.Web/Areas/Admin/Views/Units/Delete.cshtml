@@ -1,0 +1,46 @@
+﻿@model DeleteUnitModel
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="DeleteUnit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <img src="data:image;base64,@Convert.ToBase64String(Model.Unit.Image)" width="100" height="100" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.Name"></label>
+                <input readonly asp-for="Unit.Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.UnlockLevel"></label>
+                <input readonly asp-for="Unit.UnlockLevel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.ExpWorth"></label>
+                <input readonly asp-for="Unit.ExpWorth" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.MineralCost"></label>
+                <input readonly asp-for="Unit.MineralCost" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.GasCost"></label>
+                <input readonly asp-for="Unit.GasCost" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.Health"></label>
+                <input readonly asp-for="Unit.Health" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit.Damage"></label>
+                <input readonly asp-for="Unit.Damage" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-danger">Delete unit</button>
+        </form>
+    </div>
+</div>

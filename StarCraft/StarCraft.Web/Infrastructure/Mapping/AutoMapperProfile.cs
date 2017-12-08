@@ -11,11 +11,11 @@
         {
             this.CreateMap<Building, BasicBuildingInfoServiceModel>();
 
-            this.CreateMap<Building, EditBuildingModel>();
+            this.CreateMap<Building, BuildingServiceModel>();
 
             this.CreateMap<Unit, BasicUnitInfoServiceModel>();
 
-            this.CreateMap<Unit, EditUnitModel>();
+            this.CreateMap<Unit, UnitServiceModel>();
 
             this.CreateMap<User, UserInfoBattleServiceModel>()
                 .ForMember(a => a.ArmyQuantity, opt => opt.MapFrom(c => c.Units.Sum(d => d.Quantity)));

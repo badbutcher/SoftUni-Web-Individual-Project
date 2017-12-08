@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using StarCraft.Data.Models;
+    using StarCraft.Services.Contracts;
     using StarCraft.Web.Models.AccountViewModels;
     using StarCraft.Web.Services;
     using static StarCraft.Data.DataConstants;
@@ -24,17 +25,20 @@
         private readonly SignInManager<User> signInManager;
         private readonly IEmailSender emailSender;
         private readonly ILogger logger;
+        private readonly IBuildingService buildings;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IBuildingService buildings)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
             this.logger = logger;
+            this.buildings = buildings;
         }
 
         [TempData]
@@ -228,8 +232,8 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = 5000000, /// TODO
-                    Gas = 5000000, /// TODO
+                    Minerals = 5000000, /// TODOTODO
+                    Gas = 5000000, /// TODOTODO
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };

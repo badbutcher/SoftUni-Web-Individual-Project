@@ -1,4 +1,4 @@
-﻿@model EditUnitModel
+﻿@model UnitServiceModel
 @{
     ViewData["Title"] = "Edit";
 }
@@ -9,6 +9,9 @@
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <img src="data:image;base64,@Convert.ToBase64String(Model.Image)" width="100" height="100" />
+            </div>
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" />

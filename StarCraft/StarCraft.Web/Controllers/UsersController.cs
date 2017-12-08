@@ -116,9 +116,9 @@
         {
             var userId = this.userManager.GetUserId(User);
 
-            await this.users.BattleEnemyAsync(userId, enemyId);
+            var result = await this.users.BattleEnemyAsync(userId, enemyId);
 
-            return this.View();
+            return this.View(result);
         }
 
         public IActionResult Home()

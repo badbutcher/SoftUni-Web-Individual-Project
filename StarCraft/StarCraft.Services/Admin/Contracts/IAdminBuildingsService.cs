@@ -11,10 +11,12 @@
 
         Task<bool> DoesBuildingExistsAsync(string name, Race race);
 
-        Task<EditBuildingModel> FindByIdAsync(int id);
+        Task<BuildingServiceModel> FindByIdAsync(int id);
 
         Task<IEnumerable<BasicBuildingInfoServiceModel>> AllBuildingsAsync();
 
         Task EditAsync(int id, string name, int mineralCost, int gasCost, byte[] image);
+
+        Task DeleteAsync(int id);
     }
 }

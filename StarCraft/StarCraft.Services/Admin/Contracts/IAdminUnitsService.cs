@@ -15,8 +15,10 @@
 
         Task<IEnumerable<BasicUnitInfoServiceModel>> AllUnitsAsync();
 
-        Task<EditUnitModel> FindByIdAsync(int id);
+        Task<UnitServiceModel> FindByIdAsync(int id);
 
         Task EditAsync(int id, string name, int expWorth, int unlockLevel, int mineralCost, int gasCost, int health, int damage, byte[] fileContents);
+
+        Task DeleteAsync(int id);
     }
 }

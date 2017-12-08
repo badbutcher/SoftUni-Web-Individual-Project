@@ -13,7 +13,7 @@
 
         Task<UserInfoBattleServiceModel> FindRandomPlayerAsync(string userId);
 
-        Task BattleEnemyAsync(string userId, string enemyId);
+        Task<BattleResultServiceModel> BattleEnemyAsync(string userId, string enemyId);
 
         Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnitsAsync(string id);
     }

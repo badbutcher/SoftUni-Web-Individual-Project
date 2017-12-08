@@ -86,7 +86,7 @@
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
-            return this.View(new EditUnitModel
+            return this.View(new UnitServiceModel
             {
                 Name = unit.Name,
                 ExpWorth = unit.ExpWorth,
@@ -94,12 +94,13 @@
                 MineralCost = unit.MineralCost,
                 GasCost = unit.GasCost,
                 Health = unit.Health,
-                Damage = unit.Damage
+                Damage = unit.Damage,
+                Image = unit.Image
             });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, EditUnitModel model, IFormFile image)
+        public async Task<IActionResult> Edit(int id, UnitServiceModel model, IFormFile image)
         {
             if (!ModelState.IsValid)
             {
@@ -122,6 +123,48 @@
             }
 
             await this.units.EditAsync(id, model.Name, model.ExpWorth, model.UnlockLevel, model.MineralCost, model.GasCost, model.Health, model.Damage, fileContents);
+
+            return this.RedirectToAction(nameof(this.AllUnits));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var unit = await this.units.FindByIdAsync(id);
+
+            if (unit == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            return this.View(new DeleteUnitModel
+            {
+                Id = id,
+                Unit = new UnitServiceModel
+                {
+                    Name = unit.Name,
+                    UnlockLevel = unit.UnlockLevel,
+                    ExpWorth = unit.ExpWorth,
+                    MineralCost = unit.MineralCost,
+                    GasCost = unit.GasCost,
+                    Health = unit.Health,
+                    Damage = unit.Damage,
+                    Image = unit.Image
+                }
+            });
+        }
+
+        public async Task<IActionResult> DeleteUnit(int id)
+        {
+            var building = await this.units.FindByIdAsync(id);
+
+            if (building == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            await this.units.DeleteAsync(id);
 
             return this.RedirectToAction(nameof(this.AllUnits));
         }

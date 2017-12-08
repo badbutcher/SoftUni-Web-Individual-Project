@@ -46,6 +46,14 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            Building building = await this.db.Buildings.FirstOrDefaultAsync(a => a.Id == id);
+
+            this.db.Buildings.Remove(building);
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<bool> DoesBuildingExistsAsync(string name, Race race)
         {
             Building building = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower() && a.Race == race);
@@ -75,11 +83,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<EditBuildingModel> FindByIdAsync(int id)
+        public async Task<BuildingServiceModel> FindByIdAsync(int id)
         {
             var result = await this.db.Buildings
                .Where(c => c.Id == id)
-               .ProjectTo<EditBuildingModel>()
+               .ProjectTo<BuildingServiceModel>()
                .FirstOrDefaultAsync();
 
             return result;

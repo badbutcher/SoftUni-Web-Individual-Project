@@ -76,16 +76,17 @@
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
-            return this.View(new EditBuildingModel
+            return this.View(new BuildingServiceModel
             {
                 Name = building.Name,
                 MineralCost = building.MineralCost,
-                GasCost = building.GasCost
+                GasCost = building.GasCost,
+                Image = building.Image
             });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, EditBuildingModel model, IFormFile image)
+        public async Task<IActionResult> Edit(int id, BuildingServiceModel model, IFormFile image)
         {
             if (!ModelState.IsValid)
             {
@@ -108,6 +109,44 @@
             }
 
             await this.buildings.EditAsync(id, model.Name, model.MineralCost, model.GasCost, fileContents);
+
+            return this.RedirectToAction(nameof(this.AllBuildings));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var building = await this.buildings.FindByIdAsync(id);
+
+            if (building == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            return this.View(new DeleteBuildingModel
+            {
+                Id = id,
+                Building = new BuildingServiceModel
+                {
+                    Name = building.Name,
+                    MineralCost = building.MineralCost,
+                    GasCost = building.GasCost,
+                    Image = building.Image
+                }
+            });
+        }
+
+        public async Task<IActionResult> DeleteBuilding(int id)
+        {
+            var building = await this.buildings.FindByIdAsync(id);
+
+            if (building == null)
+            {
+                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            await this.buildings.DeleteAsync(id);
 
             return this.RedirectToAction(nameof(this.AllBuildings));
         }

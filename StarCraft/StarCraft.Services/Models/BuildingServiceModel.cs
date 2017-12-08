@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using static StarCraft.Data.DataConstants;
 
-    public class EditBuildingModel
+    public class BuildingServiceModel
     {
         [Required]
         [MinLength(MinBuildingNameLength)]

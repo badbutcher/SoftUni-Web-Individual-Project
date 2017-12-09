@@ -102,7 +102,7 @@
 
             if (enemy == null)
             {
-                TempData.AddErrorMessage("No enemies found for you. Please try again later.");
+                TempData.AddErrorMessage("No enemies found or you don't have enough troops.");
                 return this.View(new UserInfoBattleServiceModel
                 {
                     ArmyQuantity = 0

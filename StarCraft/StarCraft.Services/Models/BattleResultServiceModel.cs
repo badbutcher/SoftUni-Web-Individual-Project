@@ -1,9 +1,6 @@
 ﻿namespace StarCraft.Services.Models
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
-    using StarCraft.Data.Migrations;
 
     public class BattleResultServiceModel
     {
@@ -11,8 +8,8 @@
 
         public int EnemyXpWon { get; set; }
 
-        public IList<UnitUser> UserTroopsLost { get; set; }
+        public IDictionary<string, int> UserTroopsLost { get; set; } = new Dictionary<string, int>();
 
-        public IList<UnitUser> EnemyTroopsLost { get; set; }
+        public IDictionary<string, int> EnemyTroopsLost { get; set; } = new Dictionary<string, int>();
     }
 }

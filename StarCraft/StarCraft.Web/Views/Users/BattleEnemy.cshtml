@@ -6,3 +6,22 @@
 <h2>@ViewData["Title"]</h2>
 
 <div>You won @Model.UserXpWon exp</div>
+
+<div>
+    @foreach (var item in Model.UserTroopsLost)
+    {
+        <div>@item.Key - @item.Value</div>
+    }
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div>
+    @foreach (var item in Model.EnemyTroopsLost)
+    {
+        <div>@item.Key - @item.Value</div>
+    }
+</div>

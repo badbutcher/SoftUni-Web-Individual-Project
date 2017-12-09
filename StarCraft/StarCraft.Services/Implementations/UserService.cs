@@ -150,7 +150,6 @@
 
         public async Task<BattleResultServiceModel> BattleEnemyAsync(string userId, string enemyId)
         {
-            Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
             User enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Id == enemyId);
@@ -160,7 +159,7 @@
 
             await this.GetUnits(userUnits);
             await this.GetUnits(enemyUnits);
-            var battle = await this.StartBattle(userUnits, enemyUnits); //// TODOTODO
+            var battle = await this.StartBattle(userUnits, enemyUnits);
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
             await this.LevelUp(user);
@@ -170,41 +169,46 @@
             return battle;
         }
 
-        private async Task<BattleResultServiceModel> StartBattle(List<UnitUser> attacker, List<UnitUser> defender)
+        private async Task<BattleResultServiceModel> StartBattle(List<UnitUser> user, List<UnitUser> enemy)
         {
             BattleResultServiceModel result = new BattleResultServiceModel();
 
-            foreach (var attackerUnit in attacker.Where(a => a.Quantity >= 1))
+            foreach (var userUnit in user.Where(a => a.Quantity >= 1))
             {
-                var currentAttackingUnitHealth = attackerUnit.Unit.Health * attackerUnit.Quantity;
-                var currentAttackingUnitDamage = attackerUnit.Unit.Damage * attackerUnit.Quantity;
+                var currentUserUnitDamage = userUnit.Unit.Damage * userUnit.Quantity;
 
-                foreach (var defenderUnit in defender.Where(a => a.Quantity >= 1))
+                foreach (var enemyUnit in enemy.Where(a => a.Quantity >= 1))
                 {
-                    var currentDefendingUnitHealth = defenderUnit.Unit.Health * defenderUnit.Quantity;
-                    var currentDefendingUnitDamage = defenderUnit.Unit.Damage * defenderUnit.Quantity;
+                    var currentEnemyUnitDamage = enemyUnit.Unit.Damage * enemyUnit.Quantity;
 
-                    currentAttackingUnitHealth -= currentDefendingUnitDamage;
-                    currentDefendingUnitHealth -= currentAttackingUnitDamage;
+                    var currentUserUnitCount = userUnit.Quantity;
+                    var currentEnemyUnitCount = enemyUnit.Quantity;
 
-                    var currentAttackingUnitCount = attackerUnit.Quantity;
-                    var currentDefenderUnitCount = defenderUnit.Quantity;
+                    int userUnitsToLose = (int)Math.Ceiling((double)currentEnemyUnitDamage / userUnit.Unit.Health);
+                    int enemyUnitsToLose = (int)Math.Ceiling((double)currentUserUnitDamage / enemyUnit.Unit.Health);
 
-                    attackerUnit.Quantity -= (int)Math.Ceiling((double)currentDefendingUnitDamage / attackerUnit.Unit.Health);
-                    defenderUnit.Quantity -= (int)Math.Ceiling((double)currentAttackingUnitDamage / defenderUnit.Unit.Health);
-
-                    result.UserXpWon += (currentDefenderUnitCount - defenderUnit.Quantity) * defenderUnit.Unit.ExpWorth;
-                    result.EnemyXpWon += (currentAttackingUnitCount - attackerUnit.Quantity) * attackerUnit.Unit.ExpWorth;
-
-                    if (attackerUnit.Quantity <= 0)
+                    if (userUnitsToLose >= currentUserUnitCount)
                     {
-                        attackerUnit.Quantity = 0;
-                        await this.db.SaveChangesAsync();
-                        break;
+                        userUnitsToLose = currentUserUnitCount;
                     }
-                    else if (defenderUnit.Quantity <= 0)
+
+                    if (enemyUnitsToLose >= currentEnemyUnitCount)
                     {
-                        defenderUnit.Quantity = 0;
+                        enemyUnitsToLose = currentEnemyUnitCount;
+                    }
+
+                    this.AddLostUnits(result.UserTroopsLost, userUnit, userUnitsToLose);
+                    this.AddLostUnits(result.EnemyTroopsLost, enemyUnit, enemyUnitsToLose);
+
+                    userUnit.Quantity -= userUnitsToLose;
+                    enemyUnit.Quantity -= enemyUnitsToLose;
+
+                    result.UserXpWon += enemyUnitsToLose * enemyUnit.Unit.ExpWorth;
+                    result.EnemyXpWon += userUnitsToLose * userUnit.Unit.ExpWorth;
+
+                    if (userUnit.Quantity <= 0)
+                    {
+                        userUnit.Quantity = 0;
                         await this.db.SaveChangesAsync();
                         break;
                     }
@@ -214,6 +218,16 @@
             }
 
             return result;
+        }
+
+        private void AddLostUnits(IDictionary<string, int> troopsLost, UnitUser unit, int unitsLost)
+        {
+            if (!troopsLost.ContainsKey(unit.Unit.Name))
+            {
+                troopsLost.Add(unit.Unit.Name, 0);
+            }
+
+            troopsLost[unit.Unit.Name] += unitsLost;
         }
 
         private async Task LevelUp(User user)
@@ -237,7 +251,7 @@
                 Unit userUnit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == unit.UnitId);
             }
         }
-        
+
         private Tuple<bool, string> BadRequest()
         {
             return new Tuple<bool, string>(false, "Bad Request 404.");

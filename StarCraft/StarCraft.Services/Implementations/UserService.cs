@@ -63,6 +63,11 @@
 
         public async Task<Tuple<bool, string>> BuyUnitAsync(int unitId, string userId, int quantity)
         {
+            if (quantity <= 0)
+            {
+                quantity = 1;
+            }
+
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
             if (user == null)
@@ -127,6 +132,13 @@
         {
             Random r = new Random();
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            List<UnitUser> userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
+            await this.GetUnits(user.Units);
+
+            if (user.Units.Sum(a => a.Quantity) <= 0)
+            {
+                return null;
+            }
 
             var enemies = await this.db.Users
                 .ProjectTo<UserInfoBattleServiceModel>()
@@ -175,17 +187,16 @@
 
             foreach (var userUnit in user.Where(a => a.Quantity >= 1))
             {
-                var currentUserUnitDamage = userUnit.Unit.Damage * userUnit.Quantity;
-
                 foreach (var enemyUnit in enemy.Where(a => a.Quantity >= 1))
                 {
+                    var currentUserUnitDamage = userUnit.Unit.Damage * userUnit.Quantity;
                     var currentEnemyUnitDamage = enemyUnit.Unit.Damage * enemyUnit.Quantity;
 
                     var currentUserUnitCount = userUnit.Quantity;
                     var currentEnemyUnitCount = enemyUnit.Quantity;
 
-                    int userUnitsToLose = (int)Math.Ceiling((double)currentEnemyUnitDamage / userUnit.Unit.Health);
-                    int enemyUnitsToLose = (int)Math.Ceiling((double)currentUserUnitDamage / enemyUnit.Unit.Health);
+                    int userUnitsToLose = (int)Math.Round((double)currentEnemyUnitDamage / userUnit.Unit.Health);
+                    int enemyUnitsToLose = (int)Math.Round((double)currentUserUnitDamage / enemyUnit.Unit.Health);
 
                     if (userUnitsToLose >= currentUserUnitCount)
                     {

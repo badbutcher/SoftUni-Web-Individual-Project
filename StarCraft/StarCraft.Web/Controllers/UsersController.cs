@@ -30,7 +30,7 @@
 
         public async Task<IActionResult> BuyBuilding()
         {
-            var user = await this.userManager.FindByNameAsync(User.Identity.Name);
+            User user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Level, user.Race);
 
@@ -45,7 +45,7 @@
         [HttpPost]
         public async Task<IActionResult> BuyBuilding(int buildingId)
         {
-            var userId = this.userManager.GetUserId(User);
+            string userId = this.userManager.GetUserId(User);
 
             Tuple<bool, string> success = await this.users.BuyBuildingAsync(buildingId, userId);
 
@@ -62,7 +62,7 @@
 
         public async Task<IActionResult> BuyUnit()
         {
-            var user = await this.userManager.FindByNameAsync(User.Identity.Name);
+            User user = await this.userManager.FindByNameAsync(User.Identity.Name);
 
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
             var userUnits = await this.users.GetUserUnitsAsync(user.Id);
@@ -79,7 +79,7 @@
         [HttpPost]
         public async Task<IActionResult> BuyUnit(int unitId, int quantity)
         {
-            var userId = this.userManager.GetUserId(User);
+            string userId = this.userManager.GetUserId(User);
 
             Tuple<bool, string> success = await this.users.BuyUnitAsync(unitId, userId, quantity);
 
@@ -96,7 +96,7 @@
 
         public async Task<IActionResult> FindRandomPlayer()
         {
-            var userId = this.userManager.GetUserId(User);
+            string userId = this.userManager.GetUserId(User);
 
             var enemy = await this.users.FindRandomPlayerAsync(userId);
 
@@ -114,7 +114,7 @@
 
         public async Task<IActionResult> BattleEnemy(string enemyId)
         {
-            var userId = this.userManager.GetUserId(User);
+            string userId = this.userManager.GetUserId(User);
 
             var result = await this.users.BattleEnemyAsync(userId, enemyId);
 

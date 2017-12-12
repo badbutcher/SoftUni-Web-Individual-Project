@@ -60,6 +60,8 @@
         {
             app.UseDatabaseMigration();
 
+            /// app.SeedUsers(); Seeds random users
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

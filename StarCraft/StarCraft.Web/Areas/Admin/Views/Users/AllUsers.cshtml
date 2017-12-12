@@ -1,0 +1,48 @@
+﻿@model UserListingViewModel
+@{
+    ViewData["Title"] = "AllUsers";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <th>@user.Username</th>
+                <th>@user.Email</th>
+                <th>
+                    <form method="post" asp-controller="Users" asp-action="AddUserResources" asp-route-userId="@user.Id">
+                        Minerals: <input asp-for="@Model.Minerals" min="0" class="form-control" />
+                        Gas: <input asp-for="@Model.Gas" min="0" class="form-control" />
+                        <button type="submit" class="btn btn-success">Change</button>
+                    </form>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.TotalUsers > Model.Users.Count())
+{
+    <ul class="pagination">
+        <li class="@(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+            <a asp-controller="Users" asp-action="AllUsers" asp-route-page="@Model.PreviousPage" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="@(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+            <a asp-controller="Users" asp-action="AllUsers" asp-route-page="@Model.NextPage" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+}

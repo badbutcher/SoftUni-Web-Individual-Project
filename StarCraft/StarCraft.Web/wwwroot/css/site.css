@@ -34,6 +34,10 @@
     }
 }
 
+.pagination li.disabled a {
+    pointer-events: none;
+}
+
 /* Registered user home page css */
 .clickable:hover {
     outline: 2px solid yellow;

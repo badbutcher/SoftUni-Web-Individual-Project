@@ -10,6 +10,6 @@
 
         Task<int> TotalAsync();
 
-        Task AddResources(string userId, int minerals, int gas);
+        Task AddResourcesAsync(string userId, int minerals, int gas);
     }
 }

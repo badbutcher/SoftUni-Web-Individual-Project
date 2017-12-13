@@ -30,7 +30,7 @@
 
         public async Task<IActionResult> AddUserResources(string userId, int minerals, int gas)
         {
-            await this.users.AddResources(userId, minerals, gas);
+            await this.users.AddResourcesAsync(userId, minerals, gas);
 
             return this.RedirectToAction(nameof(this.AllUsers));
         }

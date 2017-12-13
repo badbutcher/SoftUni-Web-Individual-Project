@@ -37,6 +37,11 @@
                 return this.BadRequest();
             }
 
+            if (user.Race != building.Race)
+            {
+                return this.BadRequest();
+            }
+
             var usersBuildings = this.db.UserBuilding.Where(a => a.UserId == userId);
 
             if (usersBuildings.Any(a => a.BuildingId == buildingId))
@@ -78,6 +83,11 @@
             Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == unitId);
 
             if (unit == null)
+            {
+                return this.BadRequest();
+            }
+
+            if (user.Race != unit.Race)
             {
                 return this.BadRequest();
             }
@@ -164,7 +174,17 @@
         {
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
+            if (user == null)
+            {
+                return null;
+            }
+
             User enemy = await this.db.Users.FirstOrDefaultAsync(a => a.Id == enemyId);
+
+            if (enemy == null)
+            {
+                return null;
+            }
 
             List<UnitUser> userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
             List<UnitUser> enemyUnits = await this.db.Users.Where(a => a.Id == enemy.Id).Select(c => c.Units).FirstOrDefaultAsync();

@@ -118,6 +118,12 @@
 
             var result = await this.users.BattleEnemyAsync(userId, enemyId);
 
+            if (result == null)
+            {
+                TempData.AddErrorMessage("No enemies found or you don't have enough troops.");
+                return this.RedirectToAction(nameof(this.FindRandomPlayer));
+            }
+
             return this.View(result);
         }
 

@@ -30,7 +30,7 @@
             return result;
         }
 
-        public async Task AddResources(string userId, int minerals, int gas)
+        public async Task AddResourcesAsync(string userId, int minerals, int gas)
         {
             var user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 

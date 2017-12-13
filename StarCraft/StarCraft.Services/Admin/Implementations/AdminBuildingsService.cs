@@ -46,12 +46,18 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             Building building = await this.db.Buildings.FirstOrDefaultAsync(a => a.Id == id);
 
+            if (building == null)
+            {
+                return false;
+            }
+
             this.db.Buildings.Remove(building);
             await this.db.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> DoesBuildingExistsAsync(string name, Race race)

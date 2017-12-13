@@ -9,6 +9,7 @@
     using StarCraft.Data.Models;
     using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Admin.Implementations;
+    using StarCraft.Services.Models;
     using StarCraft.Web.Data;
     using Xunit;
 
@@ -23,13 +24,7 @@
         public async Task AllBuildingsAsyncCorrectCount()
         {
             // Arrange
-            StarCraftDbContext db = this.GetDatabase();
-
-            await db.AddRangeAsync(this.TestData());
-
-            await db.SaveChangesAsync();
-
-            AdminBuildingsService adminBuildingsService = new AdminBuildingsService(db);
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
 
             // Act
             var result = await adminBuildingsService.AllBuildingsAsync();
@@ -42,13 +37,7 @@
         public async Task AllBuildingsAsyncCorrectRaceOrder()
         {
             // Arrange
-            StarCraftDbContext db = this.GetDatabase();
-
-            await db.AddRangeAsync(this.TestData());
-
-            await db.SaveChangesAsync();
-
-            AdminBuildingsService adminBuildingsService = new AdminBuildingsService(db);
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
 
             // Act
             var result = await adminBuildingsService.AllBuildingsAsync();
@@ -58,6 +47,126 @@
                 .Match(a => a.ElementAt(0).Race == Race.Terran &&
                 a.ElementAt(2).Race == Race.Zerg &&
                 a.ElementAt(5).Race == Race.Protoss);
+        }
+
+        [Fact]
+        public async Task CreateBuildingAsyncCorrectCreation()
+        {
+            // Arrange
+            StarCraftDbContext db = this.GetDatabase();
+
+            AdminBuildingsService adminBuildingsService = new AdminBuildingsService(db);
+
+            // Act
+            string name = "Bunker";
+            Race race = Race.Terran;
+            int unlockLevel = 2;
+            int mineralCost = 100;
+            int gasCost = 0;
+            byte[] image = new byte[100];
+
+            await adminBuildingsService.CreateBuildingAsync(name, race, unlockLevel, mineralCost, gasCost, image);
+
+            //Assert
+            db.Buildings.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public async Task DeleteAsyncCorrectDeletion()
+        {
+            // Arrange
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
+
+            // Act
+            bool result = await adminBuildingsService.DeleteAsync(3);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task DeleteAsyncNoBuildingFound()
+        {
+            // Arrange
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
+
+            // Act
+            bool result = await adminBuildingsService.DeleteAsync(8);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task DoesBuildingExistsAsyncBuildingFound()
+        {
+            // Arrange
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
+
+            // Act
+            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Pylon", Race.Protoss);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task DoesBuildingExistsAsyncBuildingNotFound()
+        {
+            // Arrange
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
+
+            // Act
+            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Barracks", Race.Protoss);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task FindByIdAsyncFound()
+        {
+            // Arrange
+            AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
+
+            // Act
+            var result = await adminBuildingsService.FindByIdAsync(3);
+
+            //Assert
+            result.Should().BeOfType<BuildingServiceModel>();
+        }
+
+        [Fact]
+        public async Task EditAsyncSuccess()
+        {
+            // Arrange
+            StarCraftDbContext db = this.GetDatabase();
+
+            await db.AddRangeAsync(this.TestData());
+
+            await db.SaveChangesAsync();
+
+            AdminBuildingsService adminBuildingsService = new AdminBuildingsService(db);
+
+            // Act
+            await adminBuildingsService.EditAsync(1, "NewName", 777, 777, new byte[1000]);
+
+            var result = await db.Buildings.FirstOrDefaultAsync(a => a.Id == 1);
+
+            //Assert
+            db.Buildings.Should().Contain(result);
+        }
+
+        private async Task<AdminBuildingsService> DataBaseInitialize()
+        {
+            StarCraftDbContext db = this.GetDatabase();
+
+            await db.AddRangeAsync(this.TestData());
+
+            await db.SaveChangesAsync();
+
+            AdminBuildingsService adminBuildingsService = new AdminBuildingsService(db);
+            return adminBuildingsService;
         }
 
         private StarCraftDbContext GetDatabase()

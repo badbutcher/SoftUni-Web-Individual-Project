@@ -17,6 +17,6 @@
 
         Task EditAsync(int id, string name, int mineralCost, int gasCost, byte[] image);
 
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

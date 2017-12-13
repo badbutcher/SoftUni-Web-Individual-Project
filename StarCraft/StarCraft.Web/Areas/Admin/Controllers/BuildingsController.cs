@@ -146,7 +146,13 @@
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
-            await this.buildings.DeleteAsync(id);
+            bool delete = await this.buildings.DeleteAsync(id);
+
+            if (!delete)
+            {
+                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
 
             return this.RedirectToAction(nameof(this.AllBuildings));
         }

@@ -56,7 +56,8 @@
 
             if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
             {
-                return this.View(nameof(this.CreateUnit));
+                TempData.AddErrorMessage("The image was no in the correct format or the size was more that 5mb");
+                return this.RedirectToAction(nameof(this.CreateUnit));
             }
 
             await this.units.CreateUnitAsync(

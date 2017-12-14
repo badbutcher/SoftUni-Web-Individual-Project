@@ -3,45 +3,42 @@
     this.ViewData["Title"] = "StarCraft";
 }
 
-<h1 class="text-center">@this.ViewData["Title"]</h1>
-<div class="row ">
-    @if (!User.Identity.IsAuthenticated)
+<h1 class="text-center darkBackground">@this.ViewData["Title"]</h1>
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="jumbotron text-center">
+        <iframe width="480" height="234" src="https://www.youtube.com/embed/H4Z6Rmbtk1k"></iframe>
+        <br />
+        <div>
+            StarCraft introduced many revolutionary new features that have since become staples of the real-time strategy genre: asymmetric factions, meticulous balance, and a strong emphasis on deep strategy and high accessibility. Find out why, after more than ten years, StarCraft continues to headline gaming tournaments worldwide.
+        </div>
+        <br />
+        <div>Wanna try the game out? Register <a asp-controller="Account" asp-action="Register">here</a> if you are new or login <a asp-controller="Account" asp-action="Login">here</a> if you have an account.</div>
+    </div>
+}
+else if (!User.IsInRole(WebConstats.AdministratorRole))
+{
+<div class="container-fluid text-center">
+    @if (Model == Race.Terran)
     {
-        <div class="col-md-6">
-            <div>
-                StarCraft introduced many revolutionary new features that have since become staples of the real-time strategy genre: asymmetric factions, meticulous balance, and a strong emphasis on deep strategy and high accessibility. Find out why, after more than ten years, StarCraft continues to headline gaming tournaments worldwide.
-            </div>
-            <br />
-            <iframe width="480" height="234" src="https://www.youtube.com/embed/H4Z6Rmbtk1k"></iframe>
-        </div>
-        <div class="col-md-6">
-            <div>Wanna try the game out? Register <a asp-controller="Account" asp-action="Register">here</a> if you are new or login <a asp-controller="Account" asp-action="Login">here</a> if you have an account.</div>
-        </div>
+        <img class="background darkBackground" src="~/images/StarCraftImage.png" alt="Background">
+        <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/terran/61.png" alt="Building one"></a>
+        <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/terran/60.png" alt="Building two"></a>
+        <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/terran/190.png" alt="Building three"></a>
     }
-    else if (!User.IsInRole(WebConstats.AdministratorRole))
+    else if (Model == Race.Zerg)
     {
-        <div class="container-fluid text-center">
-            @if (Model == Race.Terran)
-            {
-                <img class="background" src="~/images/StarCraftImage.png" alt="Background">
-                <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/terran/61.png" alt="Building one"></a>
-                <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/terran/60.png" alt="Building two"></a>
-                <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/terran/190.png" alt="Building three"></a>
-            }
-            else if (Model == Race.Zerg)
-            {
-                <img class="background" src="~/images/StarCraftImage.png" alt="Background">
-                <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/zerg/280.png" alt="Building one"></a>
-                <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/zerg/300.png" alt="Building two"></a>
-                <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/zerg/292.png" alt="Building three"></a>
-            }
-            else if (Model == Race.Protoss)
-            {
-                <img class="background" src="~/images/StarCraftImage.png" alt="Background">
-                <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/protoss/506.png" alt="Building one"></a>
-                <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/protoss/504.png" alt="Building two"></a>
-                <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/protoss/503.png" alt="Building three"></a>
-            }
-        </div>
+        <img class="background darkBackground" src="~/images/StarCraftImage.png" alt="Background">
+        <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/zerg/280.png" alt="Building one"></a>
+        <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/zerg/300.png" alt="Building two"></a>
+        <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/zerg/292.png" alt="Building three"></a>
+    }
+    else if (Model == Race.Protoss)
+    {
+        <img class="background darkBackground" src="~/images/StarCraftImage.png" alt="Background">
+        <a asp-controller="Users" asp-action="BuyBuilding"><img class="container-fluid img-2 clickable" src="~/images/homeScreen/protoss/506.png" alt="Building one"></a>
+        <a asp-controller="Users" asp-action="BuyUnit"><img class="container-fluid img-3 clickable" src="~/images/homeScreen/protoss/504.png" alt="Building two"></a>
+        <a asp-controller="Users" asp-action="Register"><img class="container-fluid img-4 clickable" src="~/images/homeScreen/protoss/503.png" alt="Building three"></a>
     }
 </div>
+}

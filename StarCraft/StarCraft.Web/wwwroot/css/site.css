@@ -1,6 +1,9 @@
 ﻿body {
+    color: aliceblue;
     padding-top: 50px;
     padding-bottom: 20px;
+    background: url("http://www.reuun.com/data/out/121/403524698-starcraft-2-wallpapers.jpg") no-repeat;
+    background-size: cover;
 }
 
 /* Wrapping element */
@@ -73,4 +76,23 @@
     top: 65%;
     left: 30%;
     transform: translate(-50%, -50%);
+}
+
+.jumbotron {
+    background-color: #1d232d;
+}
+
+.navbar {
+    background-color: #1d232d;
+}
+
+.darkBackground {
+    background-color: #1d232d;
+    margin-bottom: 5px;
+    padding: 20px;
+    border-radius: 50px;
+}
+
+.table {
+    background-color: #1d232d;
 }

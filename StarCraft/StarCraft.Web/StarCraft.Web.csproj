@@ -5,7 +5,6 @@
     <UserSecretsId>aspnet-StarCraft.Web-585C8038-4BF4-4348-8956-753684DDEED4</UserSecretsId>
   </PropertyGroup>
 
-
   <ItemGroup>
     <PackageReference Include="HangFire" Version="1.6.17" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -24,10 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\StarCraft.Data\StarCraft.Data.csproj" />
     <ProjectReference Include="..\StarCraft.Services\StarCraft.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Units\" />
   </ItemGroup>
 
 </Project>

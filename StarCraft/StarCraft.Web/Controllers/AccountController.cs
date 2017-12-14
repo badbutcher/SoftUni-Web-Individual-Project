@@ -12,7 +12,6 @@
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
     using StarCraft.Web.Models.AccountViewModels;
-    using StarCraft.Web.Services;
     using static StarCraft.Data.DataConstants;
 
     [Authorize]
@@ -24,7 +23,6 @@
 
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly IEmailSender emailSender;
         private readonly ILogger logger;
         private readonly IBuildingService buildings;
         private readonly IUserService userService;
@@ -32,14 +30,12 @@
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IEmailSender emailSender,
             ILogger<AccountController> logger,
             IBuildingService buildings,
             IUserService userService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.emailSender = emailSender;
             this.logger = logger;
             this.buildings = buildings;
             this.userService = userService;
@@ -76,11 +72,6 @@
                     return this.RedirectToLocal(returnUrl);
                 }
 
-                if (result.RequiresTwoFactor)
-                {
-                    return this.RedirectToAction(nameof(this.LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-
                 if (result.IsLockedOut)
                 {
                     this.logger.LogWarning("User account locked out.");
@@ -95,117 +86,6 @@
 
             // If we got this far, something failed, redisplay form
             return this.View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null)
-        {
-            // Ensure the user has gone through the username & password screen first
-            var user = await this.signInManager.GetTwoFactorAuthenticationUserAsync();
-
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            var model = new LoginWith2faViewModel { RememberMe = rememberMe };
-            this.ViewData["ReturnUrl"] = returnUrl;
-
-            return this.View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
-        {
-            if (!ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
-
-            var result = await this.signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMachine);
-
-            if (result.Succeeded)
-            {
-                this.logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
-                return this.RedirectToLocal(returnUrl);
-            }
-            else if (result.IsLockedOut)
-            {
-                this.logger.LogWarning("User with ID {UserId} account locked out.", user.Id);
-                return this.RedirectToAction(nameof(this.Lockout));
-            }
-            else
-            {
-                this.logger.LogWarning("Invalid authenticator code entered for user with ID {UserId}.", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
-                return this.View();
-            }
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginWithRecoveryCode(string returnUrl = null)
-        {
-            // Ensure the user has gone through the username & password screen first
-            var user = await this.signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            this.ViewData["ReturnUrl"] = returnUrl;
-
-            return this.View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model, string returnUrl = null)
-        {
-            if (!ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            var recoveryCode = model.RecoveryCode.Replace(" ", string.Empty);
-
-            var result = await this.signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
-
-            if (result.Succeeded)
-            {
-                this.logger.LogInformation("User with ID {UserId} logged in with a recovery code.", user.Id);
-                return this.RedirectToLocal(returnUrl);
-            }
-
-            if (result.IsLockedOut)
-            {
-                this.logger.LogWarning("User with ID {UserId} account locked out.", user.Id);
-                return this.RedirectToAction(nameof(this.Lockout));
-            }
-            else
-            {
-                this.logger.LogWarning("Invalid recovery code entered for user with ID {UserId}", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
-                return this.View();
-            }
         }
 
         [HttpGet]
@@ -250,8 +130,6 @@
                     this.logger.LogInformation("User created a new account with password.");
 
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await this.emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
                     this.logger.LogInformation("User created a new account with password.");
@@ -336,10 +214,22 @@
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
 
-                var user = new User { UserName = model.Email, Email = model.Email, Race = model.Race };
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Race = model.Race,
+                    Minerals = 0, /// TODOTODO
+                    Gas = 0, /// TODOTODO
+                    Level = UserStartLevel,
+                    CurrentExp = UserStartExp
+                };
+
                 var result = await this.userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    RecurringJob.AddOrUpdate(user.Id, () => this.userService.UpdateUserResources(user.Id, user.Level), Cron.Minutely);
+
                     result = await this.userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
@@ -358,59 +248,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return this.RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-
-            var user = await this.userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-
-            var result = await this.userManager.ConfirmEmailAsync(user, code);
-            return this.View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
         public IActionResult ForgotPassword()
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await this.userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await this.userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return this.RedirectToAction(nameof(this.ForgotPasswordConfirmation));
-                }
-
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await this.userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await this.emailSender.SendEmailAsync(model.Email, "Reset Password", $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                return this.RedirectToAction(nameof(this.ForgotPasswordConfirmation));
-            }
-
-            // If we got this far, something failed, redisplay form
-            return this.View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPasswordConfirmation()
         {
             return this.View();
         }

@@ -11,8 +11,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using StarCraft.Data.Models;
+    using StarCraft.Web.Infrastructure.Extensions;
     using StarCraft.Web.Models.ManageViewModels;
-    using StarCraft.Web.Services;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -22,20 +22,17 @@
 
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly IEmailSender emailSender;
         private readonly ILogger logger;
         private readonly UrlEncoder urlEncoder;
 
         public ManageController(
           UserManager<User> userManager,
           SignInManager<User> signInManager,
-          IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.emailSender = emailSender;
             this.logger = logger;
             this.urlEncoder = urlEncoder;
         }
@@ -56,7 +53,6 @@
             {
                 Username = user.UserName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = this.StatusMessage
             };
@@ -89,41 +85,7 @@
                 }
             }
 
-            var phoneNumber = user.PhoneNumber;
-            if (model.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
-                }
-            }
-
             this.StatusMessage = "Your profile has been updated";
-            return this.RedirectToAction(nameof(this.Index));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-            var email = user.Email;
-            await this.emailSender.SendEmailConfirmationAsync(email, callbackUrl);
-
-            this.StatusMessage = "Verification email sent. Please check your email.";
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -273,7 +235,8 @@
             var result = await this.userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                throw new ApplicationException($"Unexpected error occurred adding external login for user with ID '{user.Id}'.");
+                TempData.AddErrorMessage("This facebook account has been used.");
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
             // Clear the existing external cookie to ensure a clean login process
@@ -302,62 +265,6 @@
             await this.signInManager.SignInAsync(user, isPersistent: false);
             this.StatusMessage = "The external login was removed.";
             return this.RedirectToAction(nameof(this.ExternalLogins));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> TwoFactorAuthentication()
-        {
-            var user = await this.userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            var model = new TwoFactorAuthenticationViewModel
-            {
-                HasAuthenticator = await this.userManager.GetAuthenticatorKeyAsync(user) != null,
-                Is2faEnabled = user.TwoFactorEnabled,
-                RecoveryCodesLeft = await this.userManager.CountRecoveryCodesAsync(user),
-            };
-
-            return this.View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Disable2faWarning()
-        {
-            var user = await this.userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            if (!user.TwoFactorEnabled)
-            {
-                throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
-            }
-
-            return this.View(nameof(this.Disable2fa));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Disable2fa()
-        {
-            var user = await this.userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            var disable2faResult = await this.userManager.SetTwoFactorEnabledAsync(user, false);
-            if (!disable2faResult.Succeeded)
-            {
-                throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
-            }
-
-            this.logger.LogInformation("User with ID {UserId} has disabled 2fa.", user.Id);
-            return this.RedirectToAction(nameof(this.TwoFactorAuthentication));
         }
 
         [HttpGet]
@@ -414,7 +321,7 @@
 
             await this.userManager.SetTwoFactorEnabledAsync(user, true);
             this.logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
-            return this.RedirectToAction(nameof(this.GenerateRecoveryCodes));
+            return this.RedirectToAction("asd");
         }
 
         [HttpGet]
@@ -438,28 +345,6 @@
             this.logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
 
             return this.RedirectToAction(nameof(this.EnableAuthenticator));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GenerateRecoveryCodes()
-        {
-            var user = await this.userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(User)}'.");
-            }
-
-            if (!user.TwoFactorEnabled)
-            {
-                throw new ApplicationException($"Cannot generate recovery codes for user with ID '{user.Id}' as they do not have 2FA enabled.");
-            }
-
-            var recoveryCodes = await this.userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-            var model = new GenerateRecoveryCodesViewModel { RecoveryCodes = recoveryCodes.ToArray() };
-
-            this.logger.LogInformation("User with ID {UserId} has generated new 2FA recovery codes.", user.Id);
-
-            return this.View(model);
         }
 
         #region Helpers

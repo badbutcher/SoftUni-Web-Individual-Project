@@ -560,7 +560,8 @@
         return this.optional(element) || /^((\+|00(\s|\s?\-\s?)?)31(\s|\s?\-\s?)?(\(0\)[\-\s]?)?|0)6((\s|\s?\-\s?)?[0-9]){8}$/.test(value);
     }, "Please specify a valid mobile number");
 
-    /* For UK phone functions, do the following server side processing:
+    /* For UK
+ functions, do the following server side processing:
      * Compare original input with this RegEx pattern:
      * ^\(?(?:(?:00\)?[\s\-]?\(?|\+)(44)\)?[\s\-]?\(?(?:0\)?[\s\-]?\(?)?|0)([1-9]\d{1,4}\)?[\s\d\-]+)$
      * Extract $1 and set $prefix to '+44<space>' if $1 is '44', otherwise set $prefix to '0'

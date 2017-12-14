@@ -12,7 +12,6 @@
     using StarCraft.Data.Models;
     using StarCraft.Web.Data;
     using StarCraft.Web.Infrastructure.Extensions;
-    using StarCraft.Web.Services;
 
     public class Startup
     {
@@ -28,11 +27,11 @@
             services.AddDbContext<StarCraftDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            ////services.AddAuthentication().AddFacebook(facebookOptions =>
-            ////{
-            ////    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-            ////    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            ////});
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
 
             services.AddIdentity<User, IdentityRole>(opt =>
             {
@@ -44,8 +43,6 @@
             })
                 .AddEntityFrameworkStores<StarCraftDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddDomainServices();
 

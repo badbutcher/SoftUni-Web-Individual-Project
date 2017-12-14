@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
+    using Hangfire;
     using Microsoft.EntityFrameworkCore;
     using StarCraft.Data;
     using StarCraft.Data.Models;
@@ -101,7 +102,7 @@
                 return this.MoreGas();
             }
 
-            var unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
+            UnitUser unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
             var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
 
             if (!userUnits.Any() || unitQuantity == null)
@@ -127,7 +128,7 @@
             var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
             foreach (var u in userUnits)
             {
-                var unit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == u.UnitId);
+                Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Id == u.UnitId);
                 units.Add(new UnitBasicStatsServiceModel
                 {
                     Quantity = u.Quantity,
@@ -192,13 +193,33 @@
             await this.GetUnits(userUnits);
             await this.GetUnits(enemyUnits);
             var battle = await this.StartBattle(userUnits, enemyUnits);
+
+            battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
+            battle.EnemyMineralsWon += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
+            battle.UserGasWon += battle.EnemyTroopsLost.Count() * enemy.Level;
+            battle.EnemyGasWon += battle.UserTroopsLost.Count() * user.Level;
+
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
+            user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
+            enemy.Minerals += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
+            user.Gas += battle.EnemyTroopsLost.Count() * enemy.Level;
+            enemy.Gas += battle.UserTroopsLost.Count() * user.Level;
+
             await this.LevelUp(user);
             await this.LevelUp(enemy);
             await this.db.SaveChangesAsync();
 
             return battle;
+        }
+
+        public void UpdateUserResources(string id, int level)
+        {
+            var user = this.db.Users.FirstOrDefault(a => a.Id == id);
+            user.Minerals += 25 * level;
+            user.Gas += 5 * level;
+
+            this.db.SaveChanges();
         }
 
         private async Task<BattleResultServiceModel> StartBattle(List<UnitUser> user, List<UnitUser> enemy)
@@ -209,11 +230,11 @@
             {
                 foreach (var enemyUnit in enemy.Where(a => a.Quantity >= 1))
                 {
-                    var currentUserUnitDamage = userUnit.Unit.Damage * userUnit.Quantity;
-                    var currentEnemyUnitDamage = enemyUnit.Unit.Damage * enemyUnit.Quantity;
+                    int currentUserUnitDamage = userUnit.Unit.Damage * userUnit.Quantity;
+                    int currentEnemyUnitDamage = enemyUnit.Unit.Damage * enemyUnit.Quantity;
 
-                    var currentUserUnitCount = userUnit.Quantity;
-                    var currentEnemyUnitCount = enemyUnit.Quantity;
+                    int currentUserUnitCount = userUnit.Quantity;
+                    int currentEnemyUnitCount = enemyUnit.Quantity;
 
                     int userUnitsToLose = (int)Math.Round((double)currentEnemyUnitDamage / userUnit.Unit.Health);
                     int enemyUnitsToLose = (int)Math.Round((double)currentUserUnitDamage / enemyUnit.Unit.Health);
@@ -247,7 +268,7 @@
                     await this.db.SaveChangesAsync();
                 }
             }
-
+            
             return result;
         }
 
@@ -270,6 +291,7 @@
                 {
                     user.CurrentExp = 0;
                     user.Level++;
+                    RecurringJob.AddOrUpdate(user.Id, () => this.UpdateUserResources(user.Id, user.Level), Cron.Minutely);
                     await this.db.SaveChangesAsync();
                 }
             }

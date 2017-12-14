@@ -8,7 +8,7 @@
     {
         public static async Task<byte[]> ToByteArrayAsync(this IFormFile formfile)
         {
-            using (var memorySteam = new MemoryStream())
+            using (MemoryStream memorySteam = new MemoryStream())
             {
                 await formfile.CopyToAsync(memorySteam);
                 return memorySteam.ToArray();

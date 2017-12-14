@@ -1,6 +1,7 @@
 ﻿namespace StarCraft.Web
 {
     using AutoMapper;
+    using Hangfire;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -54,6 +55,9 @@
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
+
+            services.AddHangfire(config =>
+                config.UseSqlServerStorage(this.Configuration.GetConnectionString("DefaultConnection")));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -76,6 +80,9 @@
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
 
             app.UseMvc(routes =>
             {

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using StarCraft.Data.Models;
     using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Contracts;
     using StarCraft.Services.Models;
@@ -20,7 +21,7 @@
 
         public async Task<IEnumerable<BasicUnitInfoServiceModel>> AllUnitsAsync(string userId, Race race)
         {
-            var user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
             List<int> userBuildings = await this.db.UserBuilding
                 .Where(a => a.UserId == userId && a.Building.Race == race)

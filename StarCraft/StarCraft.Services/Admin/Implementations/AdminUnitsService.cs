@@ -32,7 +32,7 @@
 
         public async Task CreateUnitAsync(string name, Race race, int unlockLevel, int expWorth, int mineralCost, int gasCost, int health, int damage, string building, byte[] image)
         {
-            var buildingExists = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name == building);
+            Building buildingExists = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name == building);
 
             if (buildingExists == null)
             {
@@ -111,7 +111,7 @@
 
         public async Task<Dictionary<Race, List<string>>> GetAllBuildingsFormAsync()
         {
-            var buildings = new Dictionary<Race, List<string>>();
+            Dictionary<Race, List<string>> buildings = new Dictionary<Race, List<string>>();
 
             buildings.Add(Race.Terran, await this.db.Buildings.Where(a => a.Race == Race.Terran).Select(c => c.Name).ToListAsync());
             buildings.Add(Race.Zerg, await this.db.Buildings.Where(a => a.Race == Race.Zerg).Select(c => c.Name).ToListAsync());

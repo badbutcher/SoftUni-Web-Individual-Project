@@ -4,6 +4,14 @@
 
     public class BattleResultServiceModel
     {
+        public int UserMineralsWon { get; set; }
+
+        public int UserGasWon { get; set; }
+
+        public int EnemyMineralsWon { get; set; }
+
+        public int EnemyGasWon { get; set; }
+
         public int UserXpWon { get; set; }
 
         public int EnemyXpWon { get; set; }

@@ -23,7 +23,7 @@
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = await this.userManager.GetUserAsync(User);
+                User user = await this.userManager.GetUserAsync(User);
                 return this.View(user.Race);
             }
 

@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
+    using StarCraft.Data.Models;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Services.Admin.Models;
     using StarCraft.Web.Data;
@@ -32,7 +33,7 @@
 
         public async Task AddResourcesAsync(string userId, int minerals, int gas)
         {
-            var user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
             user.Minerals += minerals;
             user.Gas += gas;
@@ -42,7 +43,7 @@
 
         public async Task<int> TotalAsync()
         {
-            var result = await this.db.Users.CountAsync();
+            int result = await this.db.Users.CountAsync();
 
             return result;
         }

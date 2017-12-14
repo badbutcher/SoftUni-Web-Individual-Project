@@ -51,7 +51,7 @@
                                 user.Units.Add(new UnitUser() { UnitId = 26, UserId = user.Id, Quantity = j + 2 });
                             }
 
-                            var result = await userManager.CreateAsync(user, $"UserName{i}{j}");
+                            IdentityResult result = await userManager.CreateAsync(user, $"UserName{i}{j}");
                         }
                     }
                 }).Wait();

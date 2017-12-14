@@ -3,6 +3,7 @@
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
+    using Hangfire;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -26,19 +27,22 @@
         private readonly IEmailSender emailSender;
         private readonly ILogger logger;
         private readonly IBuildingService buildings;
+        private readonly IUserService userService;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            IBuildingService buildings)
+            IBuildingService buildings,
+            IUserService userService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
             this.logger = logger;
             this.buildings = buildings;
+            this.userService = userService;
         }
 
         [TempData]
@@ -232,8 +236,8 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = 5000000, /// TODOTODO
-                    Gas = 5000000, /// TODOTODO
+                    Minerals = 0, /// TODOTODO
+                    Gas = 0, /// TODOTODO
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };
@@ -241,6 +245,8 @@
                 var result = await this.userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    RecurringJob.AddOrUpdate(user.Id, () => this.userService.UpdateUserResources(user.Id, user.Level), Cron.Minutely);
+
                     this.logger.LogInformation("User created a new account with password.");
 
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);

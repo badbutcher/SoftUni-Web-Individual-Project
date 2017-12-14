@@ -12,25 +12,25 @@
     {
         public static IApplicationBuilder UseDatabaseMigration(this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 serviceScope.ServiceProvider.GetService<StarCraftDbContext>().Database.Migrate();
 
-                var userManager = serviceScope.ServiceProvider.GetService<UserManager<User>>();
-                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                UserManager<User> userManager = serviceScope.ServiceProvider.GetService<UserManager<User>>();
+                RoleManager<IdentityRole> roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
                 Task.Run(async () =>
                 {
-                    var adminName = WebConstats.AdministratorRole;
+                    string adminName = WebConstats.AdministratorRole;
 
-                    var roles = new[]
+                    string[] roles = new[]
                     {
                         adminName
                     };
 
                     foreach (var role in roles)
                     {
-                        var roleExists = await roleManager.RoleExistsAsync(role);
+                        bool roleExists = await roleManager.RoleExistsAsync(role);
 
                         if (!roleExists)
                         {
@@ -41,9 +41,9 @@
                         }
                     }
 
-                    var adminEmail = "admin@admin.com";
+                    string adminEmail = "admin@admin.com";
 
-                    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                    User adminUser = await userManager.FindByEmailAsync(adminEmail);
 
                     if (adminUser == null)
                     {

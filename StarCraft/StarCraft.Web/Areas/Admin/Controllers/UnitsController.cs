@@ -52,7 +52,7 @@
                 return this.View(unitModel);
             }
 
-            var fileContents = await image.ToByteArrayAsync();
+            byte[] fileContents = await image.ToByteArrayAsync();
 
             if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
             {
@@ -116,7 +116,7 @@
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
-            var fileContents = await image.ToByteArrayAsync();
+            byte[] fileContents = await image.ToByteArrayAsync();
 
             if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
             {

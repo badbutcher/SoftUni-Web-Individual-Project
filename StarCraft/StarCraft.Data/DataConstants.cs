@@ -26,7 +26,8 @@
         public const int MinUserGasCapacity = 0;
         public const int MaxUserGasCapacity = 100000;
 
-        public const int ExpForLevel2 = 150;
+        public const int ExpForLevel1 = 150;
+        public const int ExpForLevel2 = 200;
         public const int ExpForLevel3 = 250;
         public const int ExpForLevel4 = 400;
         public const int ExpForLevel5 = 600;
@@ -37,7 +38,7 @@
         public const int ExpForLevel10 = 3000;
 
         public const int UserStartExp = 0;
-        public const int UserStartLevel = 0;
+        public const int UserStartLevel = 1;
 
         public const int UserMinExp = 0;
         public const int UserMaxExp = 1000;

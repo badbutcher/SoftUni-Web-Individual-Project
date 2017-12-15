@@ -57,7 +57,7 @@
 
             TempData.AddSuccessMessage(success.Item2);
 
-            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            return this.RedirectToAction(nameof(this.BuyBuilding));
         }
 
         public async Task<IActionResult> BuyUnit()
@@ -91,7 +91,7 @@
 
             TempData.AddSuccessMessage(success.Item2);
 
-            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            return this.RedirectToAction(nameof(this.BuyUnit));
         }
 
         public async Task<IActionResult> FindRandomPlayer()
@@ -104,10 +104,8 @@
             if (enemy == null || user == null)
             {
                 TempData.AddErrorMessage("No enemies found or you don't have enough troops.");
-                return this.View(new UserInfoBattleServiceModel
-                {
-                    ArmyQuantity = 0
-                });
+
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
             return this.View(new BattleServiceModel

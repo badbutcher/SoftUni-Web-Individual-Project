@@ -116,8 +116,8 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = 0, /// TODOTODO
-                    Gas = 0, /// TODOTODO
+                    Minerals = 500000, /// TODOTODO
+                    Gas = 5000000, /// TODOTODO
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };

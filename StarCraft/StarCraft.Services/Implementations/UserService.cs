@@ -43,6 +43,11 @@
                 return this.BadRequest();
             }
 
+            if (user.Level < building.UnlockLevel)
+            {
+                return this.BadRequest();
+            }
+
             var usersBuildings = this.db.UserBuilding.Where(a => a.UserId == userId);
 
             if (usersBuildings.Any(a => a.BuildingId == buildingId))
@@ -88,7 +93,7 @@
                 return this.BadRequest();
             }
 
-            if (user.Race != unit.Race)
+            if (!(user.Race != unit.Race || user.Level > unit.UnlockLevel))
             {
                 return this.BadRequest();
             }
@@ -180,7 +185,7 @@
             if (user == null)
             {
                 return null;
-            }          
+            }
 
             return user;
         }

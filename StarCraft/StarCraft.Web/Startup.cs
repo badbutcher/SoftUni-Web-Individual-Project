@@ -79,7 +79,7 @@
             app.UseAuthentication();
 
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions { Authorization = new[] { new HangfireAuthorization() } });
 
             app.UseMvc(routes =>
             {

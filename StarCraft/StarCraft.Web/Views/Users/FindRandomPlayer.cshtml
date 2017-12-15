@@ -1,34 +1,38 @@
-﻿@model UserInfoBattleServiceModel
+﻿@model BattleServiceModel
 @{
     ViewData["Title"] = "Random Player";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="darkBackground">@ViewData["Title"]</h2>
 
-@if (@Model.ArmyQuantity == 0)
+@if (@Model.User.ArmyQuantity == 0)
 {
     <div>No enemies found for you. Please try again later.</div>
 }
 else
 {
-    <div>
-        Enemy name: @Model.UserName
+    <div class="row">
+        <div class="col-md-5 darkBackground">
+            <ul>
+                <li>My name: @Model.User.UserName</li>
+                <li>My level: @Model.User.Level</li>
+                <li>My race: @Model.User.Race</li>
+                <li>My total army count: @Model.User.ArmyQuantity</li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <form class="text-center" method="post" asp-action="BattleEnemy" asp-route-enemyid="@Model.Enemy.Id">
+                <button type="submit" class="btn btn-success">Battle Enemy</button>
+            </form>
+        </div>
+        <div class="col-md-5 darkBackground">
+            <ul>
+                <li>Enemy name: @Model.Enemy.UserName</li>
+                <li>Enemy level: @Model.Enemy.Level</li>
+                <li>Race: @Model.Enemy.Race</li>
+                <li>Total army count: @Model.Enemy.ArmyQuantity</li>
+            </ul>
+        </div>
     </div>
-
-    <div>
-        Enemy level: @Model.Level
-    </div>
-
-    <div>
-        Race: @Model.Race
-    </div>
-
-    <div>
-        Total army count: @Model.ArmyQuantity
-    </div>
-
-    <form method="post" asp-action="BattleEnemy" asp-route-enemyid="@Model.Id">
-        <button type="submit" class="btn btn-success">Battle Enemy</button>
-    </form>
 
 }

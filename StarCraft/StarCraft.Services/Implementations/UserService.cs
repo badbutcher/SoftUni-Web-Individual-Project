@@ -171,6 +171,20 @@
             return enemy;
         }
 
+        public async Task<UserInfoBattleServiceModel> UserBattleInfoAsync(string userId)
+        {
+            UserInfoBattleServiceModel user = await this.db.Users
+                .ProjectTo<UserInfoBattleServiceModel>()
+                .FirstOrDefaultAsync(a => a.Id == userId);
+
+            if (user == null)
+            {
+                return null;
+            }          
+
+            return user;
+        }
+
         public async Task<BattleResultServiceModel> BattleEnemyAsync(string userId, string enemyId)
         {
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -196,15 +210,15 @@
 
             battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
             battle.EnemyMineralsWon += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
-            battle.UserGasWon += battle.EnemyTroopsLost.Count() * enemy.Level;
-            battle.EnemyGasWon += battle.UserTroopsLost.Count() * user.Level;
+            battle.UserGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
+            battle.EnemyGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
 
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
             user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
             enemy.Minerals += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
-            user.Gas += battle.EnemyTroopsLost.Count() * enemy.Level;
-            enemy.Gas += battle.UserTroopsLost.Count() * user.Level;
+            user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
+            enemy.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
 
             await this.LevelUp(user);
             await this.LevelUp(enemy);

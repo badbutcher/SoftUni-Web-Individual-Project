@@ -99,8 +99,9 @@
             string userId = this.userManager.GetUserId(User);
 
             var enemy = await this.users.FindRandomPlayerAsync(userId);
+            var user = await this.users.UserBattleInfoAsync(userId);
 
-            if (enemy == null)
+            if (enemy == null || user == null)
             {
                 TempData.AddErrorMessage("No enemies found or you don't have enough troops.");
                 return this.View(new UserInfoBattleServiceModel
@@ -109,7 +110,11 @@
                 });
             }
 
-            return this.View(enemy);
+            return this.View(new BattleServiceModel
+            {
+                User = user,
+                Enemy = enemy
+            });
         }
 
         public async Task<IActionResult> BattleEnemy(string enemyId)

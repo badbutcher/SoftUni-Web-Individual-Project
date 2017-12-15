@@ -3,29 +3,29 @@
     ViewData["Title"] = "Battle Status";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="darkBackground">@ViewData["Title"]</h2>
 
-<div>You won @Model.UserXpWon exp</div>
-
-<div>You won @Model.UserMineralsWon minerals</div>
-
-<div>You won @Model.UserGasWon gas</div>
-
-<div>
-    @foreach (var item in Model.UserTroopsLost)
-    {
-        <div>@item.Key - @item.Value</div>
-    }
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<div>
-    @foreach (var item in Model.EnemyTroopsLost)
-    {
-        <div>@item.Key - @item.Value</div>
-    }
+<div class="row darkBackground">
+    <div class="col-md-6">
+        <div>You won: @Model.UserXpWon exp</div>
+        <div>You won: @Model.UserMineralsWon minerals</div>
+        <div>You won: @Model.UserGasWon gas</div>
+        <br />
+        Troops lost:
+        <div>
+            @foreach (var item in Model.UserTroopsLost)
+            {
+                <div>@item.Key - @item.Value</div>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        Enemy troops killed:
+        <div>
+            @foreach (var item in Model.EnemyTroopsLost)
+            {
+                <div>@item.Key - @item.Value</div>
+            }
+        </div>
+    </div>
 </div>

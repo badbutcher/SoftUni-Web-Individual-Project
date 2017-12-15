@@ -3,11 +3,11 @@
     ViewData["Title"] = "Buy Unit";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="darkBackground">@ViewData["Title"]</h2>
 
 @await Html.PartialAsync("_UserResources")
 
-<div class="row text-center">
+<div class="row text-center darkBackground">
     <div class="col-lg@((Model.BoughtUnits.Count()-12)/2)"></div>
     @foreach (var unit in Model.BoughtUnits)
     {

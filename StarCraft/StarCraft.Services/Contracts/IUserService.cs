@@ -17,6 +17,8 @@
 
         Task<IEnumerable<UnitBasicStatsServiceModel>> GetUserUnitsAsync(string id);
 
+        Task<UserInfoBattleServiceModel> UserBattleInfoAsync(string userId);
+
         void UpdateUserResources(string id, int level);
     }
 }

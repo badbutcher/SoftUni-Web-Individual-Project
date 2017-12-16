@@ -9,6 +9,8 @@
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Services.Admin.Models;
     using StarCraft.Web.Data;
+    using static StarCraft.Data.DataConstants;
+    using static ServiceConstants;
 
     public class AdminUsersService : IAdminUsersService
     {
@@ -19,12 +21,12 @@
             this.db = db;
         }
 
-        public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = 1)
+        public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(int page = FirstPage)
         {
             var result = await this.db.Users
                    .OrderByDescending(a => a.Id)
-                   .Skip((page - 1) * 25)
-                   .Take(25)
+                   .Skip((page - FirstPage) * PageSize)
+                   .Take(PageSize)
                    .ProjectTo<AdminUserListingServiceModel>()
                    .ToListAsync();
 
@@ -35,8 +37,23 @@
         {
             User user = await this.db.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
-            user.Minerals += minerals;
-            user.Gas += gas;
+            if (user.Minerals + minerals > MaxUserMineralCapacity)
+            {
+                user.Minerals = MaxUserMineralCapacity;
+            }
+            else
+            {
+                user.Minerals += minerals;
+            }
+
+            if (user.Gas + gas > MaxUserGasCapacity)
+            {
+                user.Gas = MaxUserGasCapacity;
+            }
+            else
+            {
+                user.Gas += gas;
+            }
 
             await this.db.SaveChangesAsync();
         }

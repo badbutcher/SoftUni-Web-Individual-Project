@@ -1,13 +1,18 @@
 ﻿@model UsersResources
 
 <div class="row darkBackground">
-    <div class="col-md-4"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <div><img width="20" src="~/images/Level.png" /> @Model.Level</div>
+    </div>
     <div class="col-md-2">
         <div><img width="20" src="~/images/Minerals.png" /> @Model.Minerals</div>
     </div>
     <div class="col-md-2">
         <div><img width="20" src="~/images/Gas.png" /> @Model.Gas</div>
     </div>
-
-    <div class="col-md-4"></div>
+    <div class="col-md-2">
+        <div><img width="20" src="~/images/Experience.png" /> @Model.CurrentExp</div>
+    </div>
+    <div class="col-md-2"></div>
 </div>

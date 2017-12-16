@@ -21,8 +21,8 @@
                 <th>@user.Email</th>
                 <th>
                     <form method="post" asp-controller="Users" asp-action="AddUserResources" asp-route-userId="@user.Id">
-                        Minerals: <input asp-for="@Model.Minerals" min="0" class="form-control" />
-                        Gas: <input asp-for="@Model.Gas" min="0" class="form-control" />
+                        Minerals: <input asp-for="@Model.Minerals" min="0" max="10000" class="form-control" />
+                        Gas: <input asp-for="@Model.Gas" min="0" max="10000" class="form-control" />
                         <button type="submit" class="btn btn-success">Change</button>
                     </form>
                 </th>

@@ -7,11 +7,21 @@
 
 @await Html.PartialAsync("_UserResources")
 
+@{
+    var units = (12 - Model.BoughtUnits.Count()) / 2;
+}
+
 <div class="row text-center darkBackground">
-    <div class="col-lg@((Model.BoughtUnits.Count()-12)/2)"></div>
+    <div class="col-lg-@(units)">
+        <figure><img src="~/images/Supply.png" /></figure>
+        <figcaption>@Model.BoughtUnits.Sum(a => a.Quantity)</figcaption>
+    </div>
     @foreach (var unit in Model.BoughtUnits)
     {
-        <div class="col-lg-1"><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" />@unit.Quantity</div>
+        <div class="col-lg-1">
+            <figure><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" /></figure>
+            <figcaption>@unit.Quantity</figcaption>
+        </div>
     }
 </div>
 
@@ -29,7 +39,7 @@
     </thead>
     <tbody>
         @foreach (var unit in Model.Units)
-            {
+        {
             <tr>
                 <th class="col-md-1"><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" /></th>
                 <td class="col-md-1">@unit.Name</td>

@@ -1,9 +1,5 @@
 ﻿namespace StarCraft.Web.Infrastructure.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Hangfire.Dashboard;
 
     public class HangfireAuthorization : IDashboardAuthorizationFilter

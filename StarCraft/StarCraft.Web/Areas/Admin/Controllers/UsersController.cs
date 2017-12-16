@@ -6,6 +6,7 @@
     using StarCraft.Data.Models;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Web.Areas.Admin.Models.Users;
+    using static StarCraft.Services.ServiceConstants;
 
     public class UsersController : AdminBaseController
     {
@@ -18,7 +19,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> AllUsers(int page = 1)
+        public async Task<IActionResult> AllUsers(int page = FirstPage)
         {
             return this.View(new UserListingViewModel
             {

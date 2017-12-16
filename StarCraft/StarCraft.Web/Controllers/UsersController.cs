@@ -5,7 +5,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using StarCraft.Data;
     using StarCraft.Data.Models;
+    using StarCraft.Services;
     using StarCraft.Services.Contracts;
     using StarCraft.Services.Models;
     using StarCraft.Web.Infrastructure.Extensions;
@@ -34,9 +36,13 @@
 
             var buildings = await this.buildings.AllBuildingsAsync(user.Id, user.Level, user.Race);
 
+            string currentExp = GetUserExp(user);
+
             return this.View(new UserBuyBuildingsViewModel
             {
                 Buildings = buildings,
+                Level = user.Level,
+                CurrentExp = currentExp,
                 Minerals = user.Minerals,
                 Gas = user.Gas
             });
@@ -67,9 +73,13 @@
             var units = await this.units.AllUnitsAsync(user.Id, user.Race);
             var userUnits = await this.users.GetUserUnitsAsync(user.Id);
 
+            string currentExp = GetUserExp(user);
+
             return this.View(new UserBuyUnitsViewModel
             {
                 Units = units,
+                Level = user.Level,
+                CurrentExp = currentExp,
                 Minerals = user.Minerals,
                 Gas = user.Gas,
                 BoughtUnits = userUnits
@@ -133,6 +143,17 @@
         public IActionResult Home()
         {
             return this.View();
+        }
+
+        private static string GetUserExp(User user)
+        {
+            string currentExp = "Max level";
+            if (typeof(ServiceConstants).GetField("ExpForLevel" + user.Level) != null)
+            {
+                currentExp = $"{user.CurrentExp}/{(int)typeof(ServiceConstants).GetField("ExpForLevel" + user.Level).GetValue(null)}";
+            }
+
+            return currentExp;
         }
     }
 }

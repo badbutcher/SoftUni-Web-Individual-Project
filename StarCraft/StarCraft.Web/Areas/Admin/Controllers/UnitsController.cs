@@ -9,6 +9,7 @@
     using StarCraft.Web.Areas.Admin.Models.Units;
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
+    using static WebConstats;
 
     public class UnitsController : AdminBaseController
     {
@@ -54,7 +55,7 @@
 
             byte[] fileContents = await image.ToByteArrayAsync();
 
-            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            if (!image.FileName.EndsWith(ImageFormat) || image.Length > DataConstants.MaxByteImageSize)
             {
                 TempData.AddErrorMessage("The image was no in the correct format or the size was more that 5mb");
                 return this.RedirectToAction(nameof(this.CreateUnit));
@@ -83,7 +84,7 @@
 
             if (unit == null)
             {
-                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
@@ -112,13 +113,13 @@
 
             if (unit == null)
             {
-                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
             byte[] fileContents = await image.ToByteArrayAsync();
 
-            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            if (!image.FileName.EndsWith(ImageFormat) || image.Length > DataConstants.MaxByteImageSize)
             {
                 return this.View(nameof(this.CreateUnit));
             }
@@ -134,7 +135,7 @@
 
             if (unit == null)
             {
-                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
@@ -161,7 +162,7 @@
 
             if (building == null)
             {
-                ModelState.AddModelError(string.Empty, $"The unit was not found.");
+                ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 

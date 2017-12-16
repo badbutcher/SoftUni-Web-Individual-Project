@@ -9,6 +9,7 @@
     using StarCraft.Web.Areas.Admin.Models.Buildings;
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
+    using static WebConstats;
 
     public class BuildingsController : AdminBaseController
     {
@@ -48,7 +49,7 @@
 
             byte[] fileContents = await image.ToByteArrayAsync();
 
-            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            if (!image.FileName.EndsWith(ImageFormat) || image.Length > DataConstants.MaxByteImageSize)
             {
                 return this.View(nameof(this.CreateBuilding));
             }
@@ -72,8 +73,7 @@
 
             if (building == null)
             {
-                ModelState.AddModelError(string.Empty, $"The building was not found.");
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return NullBuildingGoToHome();
             }
 
             return this.View(new BuildingServiceModel
@@ -97,13 +97,12 @@
 
             if (building == null)
             {
-                ModelState.AddModelError(string.Empty, $"The building was not found.");
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return NullBuildingGoToHome();
             }
 
             byte[] fileContents = await image.ToByteArrayAsync();
 
-            if (!image.FileName.EndsWith(".png") || image.Length > DataConstants.MaxByteImageSize)
+            if (!image.FileName.EndsWith(ImageFormat) || image.Length > DataConstants.MaxByteImageSize)
             {
                 return this.View(nameof(this.CreateBuilding));
             }
@@ -119,8 +118,7 @@
 
             if (building == null)
             {
-                ModelState.AddModelError(string.Empty, $"The building was not found.");
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return NullBuildingGoToHome();
             }
 
             return this.View(new DeleteBuildingModel
@@ -142,19 +140,24 @@
 
             if (building == null)
             {
-                ModelState.AddModelError(string.Empty, $"The building was not found.");
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return NullBuildingGoToHome();
             }
 
             bool delete = await this.buildings.DeleteAsync(id);
 
             if (!delete)
             {
-                ModelState.AddModelError(string.Empty, $"The building was not found.");
+                ModelState.AddModelError(string.Empty, BuildingNotFoundMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
             return this.RedirectToAction(nameof(this.AllBuildings));
+        }
+
+        private IActionResult NullBuildingGoToHome()
+        {
+            ModelState.AddModelError(string.Empty, BuildingNotFoundMessage);
+            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }
     }
 }

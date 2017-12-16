@@ -303,9 +303,9 @@
 
         private async Task LevelUp(User user)
         {
-            if (typeof(DataConstants).GetField("ExpForLevel" + user.Level) != null)
+            if (typeof(ServiceConstants).GetField("ExpForLevel" + user.Level) != null)
             {
-                int value = (int)typeof(DataConstants).GetField("ExpForLevel" + user.Level).GetValue(null);
+                int value = (int)typeof(ServiceConstants).GetField("ExpForLevel" + user.Level).GetValue(null);
                 if (user.CurrentExp >= value)
                 {
                     user.CurrentExp = 0;

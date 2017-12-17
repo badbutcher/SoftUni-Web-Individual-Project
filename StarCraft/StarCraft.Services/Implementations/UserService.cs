@@ -7,7 +7,6 @@
     using AutoMapper.QueryableExtensions;
     using Hangfire;
     using Microsoft.EntityFrameworkCore;
-    using StarCraft.Data;
     using StarCraft.Data.Models;
     using StarCraft.Services.Contracts;
     using StarCraft.Services.Models;
@@ -212,7 +211,7 @@
             await this.GetUnits(userUnits);
             await this.GetUnits(enemyUnits);
             var battle = await this.StartBattle(userUnits, enemyUnits);
-
+            
             battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
             battle.EnemyMineralsWon += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
             battle.UserGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
@@ -221,9 +220,19 @@
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
             user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
-            enemy.Minerals += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
+            enemy.Minerals -= battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
             user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
-            enemy.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
+            enemy.Gas -= battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
+
+            if (enemy.Minerals <= 0)
+            {
+                enemy.Minerals = 0;
+            }
+
+            if (enemy.Gas <= 0)
+            {
+                enemy.Gas = 0;
+            }
 
             await this.LevelUp(user);
             await this.LevelUp(enemy);

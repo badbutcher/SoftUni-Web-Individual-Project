@@ -16,7 +16,7 @@
         <div>Wanna try the game out? Register <a asp-controller="Account" asp-action="Register">here</a> if you are new or login <a asp-controller="Account" asp-action="Login">here</a> if you have an account.</div>
     </div>
 }
-else if (!User.IsInRole(WebConstats.AdministratorRole))
+else if (!User.IsInRole(WebConstants.AdministratorRole))
 {
 <div class="container-fluid text-center">
     @if (Model == Race.Terran)

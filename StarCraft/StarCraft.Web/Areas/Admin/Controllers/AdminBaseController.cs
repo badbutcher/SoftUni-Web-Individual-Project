@@ -3,8 +3,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Area(WebConstats.AdminArea)]
-    [Authorize(Roles = WebConstats.AdministratorRole)]
+    [Area(WebConstants.AdminArea)]
+    [Authorize(Roles = WebConstants.AdministratorRole)]
     public class AdminBaseController : Controller
     {
     }

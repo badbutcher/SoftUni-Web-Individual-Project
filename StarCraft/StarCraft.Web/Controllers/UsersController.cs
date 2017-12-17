@@ -5,7 +5,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using StarCraft.Data;
     using StarCraft.Data.Models;
     using StarCraft.Services;
     using StarCraft.Services.Contracts;

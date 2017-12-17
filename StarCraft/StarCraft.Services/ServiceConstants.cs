@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StarCraft.Services
+﻿namespace StarCraft.Services
 {
     public class ServiceConstants
     {

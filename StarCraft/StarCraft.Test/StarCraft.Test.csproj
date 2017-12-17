@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Web\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\StarCraft.Web\StarCraft.Web.csproj" />
   </ItemGroup>
 

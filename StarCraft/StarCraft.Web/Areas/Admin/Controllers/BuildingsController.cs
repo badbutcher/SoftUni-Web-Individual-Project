@@ -9,7 +9,7 @@
     using StarCraft.Web.Areas.Admin.Models.Buildings;
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
-    using static WebConstats;
+    using static WebConstants;
 
     public class BuildingsController : AdminBaseController
     {
@@ -37,9 +37,10 @@
         {
             bool exists = await this.buildings.DoesBuildingExistsAsync(buildingsModel.Name, buildingsModel.Race);
 
-            if (!exists)
+            if (exists)
             {
                 ModelState.AddModelError(string.Empty, $"The building {buildingsModel.Name} for the race {buildingsModel.Race} exists.");
+                return this.View(buildingsModel);
             }
 
             if (!ModelState.IsValid)

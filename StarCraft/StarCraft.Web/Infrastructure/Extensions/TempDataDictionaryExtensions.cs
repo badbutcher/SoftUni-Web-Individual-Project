@@ -6,12 +6,12 @@
     {
         public static void AddSuccessMessage(this ITempDataDictionary tempData, string message)
         {
-            tempData[WebConstats.TempDataSuccessMessageKey] = message;
+            tempData[WebConstants.TempDataSuccessMessageKey] = message;
         }
 
         public static void AddErrorMessage(this ITempDataDictionary tempData, string message)
         {
-            tempData[WebConstats.TempDataErrorMessageKey] = message;
+            tempData[WebConstants.TempDataErrorMessageKey] = message;
         }
     }
 }

@@ -9,7 +9,7 @@
     using StarCraft.Web.Areas.Admin.Models.Units;
     using StarCraft.Web.Controllers;
     using StarCraft.Web.Infrastructure.Extensions;
-    using static WebConstats;
+    using static WebConstants;
 
     public class UnitsController : AdminBaseController
     {

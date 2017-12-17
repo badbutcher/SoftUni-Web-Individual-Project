@@ -1,6 +1,6 @@
 ﻿namespace StarCraft.Web
 {
-    public class WebConstats
+    public class WebConstants
     {
         public const string AdministratorRole = "Administrator";
 

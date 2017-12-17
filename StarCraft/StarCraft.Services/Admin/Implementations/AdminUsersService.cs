@@ -9,8 +9,8 @@
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Services.Admin.Models;
     using StarCraft.Web.Data;
-    using static StarCraft.Data.DataConstants;
     using static ServiceConstants;
+    using static StarCraft.Data.DataConstants;
 
     public class AdminUsersService : IAdminUsersService
     {

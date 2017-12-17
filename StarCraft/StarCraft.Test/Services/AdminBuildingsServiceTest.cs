@@ -107,7 +107,7 @@
             bool result = await adminBuildingsService.DoesBuildingExistsAsync("Pylon", Race.Protoss);
 
             //Assert
-            result.Should().BeFalse();
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -120,7 +120,7 @@
             bool result = await adminBuildingsService.DoesBuildingExistsAsync("Barracks", Race.Protoss);
 
             //Assert
-            result.Should().BeTrue();
+            result.Should().BeFalse();
         }
 
         [Fact]

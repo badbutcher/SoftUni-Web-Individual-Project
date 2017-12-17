@@ -66,10 +66,10 @@
 
             if (building == null)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         public async Task EditAsync(int id, string name, int mineralCost, int gasCost, byte[] image)

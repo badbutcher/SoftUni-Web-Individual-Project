@@ -31,7 +31,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
-                    @if (User.IsInRole(WebConstats.AdministratorRole))
+                    @if (User.IsInRole(WebConstants.AdministratorRole))
                     {
                         <li><a asp-area="Admin" asp-controller="Buildings" asp-action="AllBuildings">All buildings</a></li>
                         <li><a asp-area="Admin" asp-controller="Units" asp-action="AllUnits">All units</a></li>
@@ -51,17 +51,17 @@
         </div>
     </nav>
     <div class="container body-content">
-        @if (TempData.ContainsKey(WebConstats.TempDataSuccessMessageKey))
+        @if (TempData.ContainsKey(WebConstants.TempDataSuccessMessageKey))
         {
             <div class="alert alert-success">
-                @TempData[WebConstats.TempDataSuccessMessageKey]
+                @TempData[WebConstants.TempDataSuccessMessageKey]
             </div>
         }
 
-        @if (TempData.ContainsKey(WebConstats.TempDataErrorMessageKey))
+        @if (TempData.ContainsKey(WebConstants.TempDataErrorMessageKey))
         {
             <div class="alert alert-danger">
-                @TempData[WebConstats.TempDataErrorMessageKey]
+                @TempData[WebConstants.TempDataErrorMessageKey]
             </div>
         }
 

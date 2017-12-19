@@ -30,7 +30,7 @@
             return result;
         }
 
-        public async Task CreateUnitAsync(string name, Race race, int unlockLevel, int expWorth, int mineralCost, int gasCost, int health, int damage, string building, byte[] image)
+        public async Task CreateUnitAsync(string name, int unlockLevel, int expWorth, int mineralCost, int gasCost, int health, int damage, string building, byte[] image)
         {
             Building buildingExists = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name == building);
 
@@ -42,7 +42,7 @@
             Unit unit = new Unit
             {
                 Name = name,
-                Race = race,
+                Race = buildingExists.Race,
                 UnlockLevel = unlockLevel,
                 ExpWorth = expWorth,
                 MineralCost = mineralCost,
@@ -66,11 +66,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<bool> DoesUnitExistsAsync(string name, Race race)
+        public async Task<bool> DoesUnitExistsAsync(string name)
         {
-            Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower() && a.Race == race);
+            Unit unit = await this.db.Units.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower());
 
-            if (unit == null)
+            if (unit != null)
             {
                 return true;
             }

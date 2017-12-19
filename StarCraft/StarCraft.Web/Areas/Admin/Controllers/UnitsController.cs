@@ -40,11 +40,11 @@
         [HttpPost]
         public async Task<IActionResult> CreateUnit(CreateUnitModel unitModel, IFormFile image)
         {
-            bool exists = await this.units.DoesUnitExistsAsync(unitModel.Name, unitModel.Race);
+            bool exists = await this.units.DoesUnitExistsAsync(unitModel.Name);
 
-            if (!exists)
+            if (exists)
             {
-                ModelState.AddModelError(string.Empty, $"The unit {unitModel.Name} for the race {unitModel.Race} exists.");
+                ModelState.AddModelError(string.Empty, $"The unit {unitModel.Name} exists.");
             }
 
             if (!ModelState.IsValid)
@@ -63,7 +63,6 @@
 
             await this.units.CreateUnitAsync(
                 unitModel.Name,
-                unitModel.Race,
                 unitModel.UnlockLevel,
                 unitModel.ExpWorth,
                 unitModel.MineralCost,
@@ -109,11 +108,19 @@
                 return this.View(model);
             }
 
-            var unit = this.units.FindByIdAsync(id);
+            var unit = await this.units.FindByIdAsync(id);
 
             if (unit == null)
             {
                 ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            }
+
+            var found = await this.units.DoesUnitExistsAsync(model.Name);
+
+            if (found)
+            {
+                TempData.AddErrorMessage(UnitExistsMessage);
                 return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 

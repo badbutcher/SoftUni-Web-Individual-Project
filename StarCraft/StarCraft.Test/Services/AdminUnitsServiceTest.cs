@@ -86,10 +86,10 @@
             AdminUnitsService adminUnitsService = await this.DataBaseInitialize();
 
             // Act
-            var result = await adminUnitsService.DoesUnitExistsAsync("Drone", Race.Zerg);
+            var result = await adminUnitsService.DoesUnitExistsAsync("Drone");
 
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -99,10 +99,10 @@
             AdminUnitsService adminUnitsService = await this.DataBaseInitialize();
 
             // Act
-            var result = await adminUnitsService.DoesUnitExistsAsync("Drone", Race.Terran);
+            var result = await adminUnitsService.DoesUnitExistsAsync("Drone2");
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeFalse();
         }
 
         [Fact]

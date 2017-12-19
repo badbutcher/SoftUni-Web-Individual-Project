@@ -60,16 +60,16 @@
             return true;
         }
 
-        public async Task<bool> DoesBuildingExistsAsync(string name, Race race)
+        public async Task<bool> DoesBuildingExistsAsync(string name)
         {
-            Building building = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower() && a.Race == race);
+            Building building = await this.db.Buildings.FirstOrDefaultAsync(a => a.Name.ToLower() == name.ToLower());
 
-            if (building == null)
+            if (building != null)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public async Task EditAsync(int id, string name, int mineralCost, int gasCost, byte[] image)

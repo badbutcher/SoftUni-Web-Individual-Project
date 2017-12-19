@@ -104,7 +104,7 @@
             AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
 
             // Act
-            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Pylon", Race.Protoss);
+            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Pylon");
 
             //Assert
             result.Should().BeTrue();
@@ -117,7 +117,7 @@
             AdminBuildingsService adminBuildingsService = await this.DataBaseInitialize();
 
             // Act
-            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Barracks", Race.Protoss);
+            bool result = await adminBuildingsService.DoesBuildingExistsAsync("Barracks2");
 
             //Assert
             result.Should().BeFalse();

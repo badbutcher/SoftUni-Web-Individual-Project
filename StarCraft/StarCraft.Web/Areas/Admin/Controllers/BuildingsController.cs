@@ -35,7 +35,7 @@
         [HttpPost]
         public async Task<IActionResult> CreateBuilding(CreateBuildingModel buildingsModel, IFormFile image)
         {
-            bool exists = await this.buildings.DoesBuildingExistsAsync(buildingsModel.Name, buildingsModel.Race);
+            bool exists = await this.buildings.DoesBuildingExistsAsync(buildingsModel.Name);
 
             if (exists)
             {
@@ -91,14 +91,22 @@
         {
             if (!ModelState.IsValid)
             {
-                return this.View(model);
+                return this.RedirectToAction(nameof(Edit));
             }
 
-            var building = this.buildings.FindByIdAsync(id);
+            var building = await this.buildings.FindByIdAsync(id);
 
             if (building == null)
             {
                 return NullBuildingGoToHome();
+            }
+
+            var found = await this.buildings.DoesBuildingExistsAsync(model.Name);
+
+            if (found)
+            {
+                TempData.AddErrorMessage(BuildingExistsMessage);
+                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
             }
 
             byte[] fileContents = await image.ToByteArrayAsync();
@@ -157,7 +165,7 @@
 
         private IActionResult NullBuildingGoToHome()
         {
-            ModelState.AddModelError(string.Empty, BuildingNotFoundMessage);
+            TempData.AddErrorMessage(BuildingNotFoundMessage);
             return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
         }
     }

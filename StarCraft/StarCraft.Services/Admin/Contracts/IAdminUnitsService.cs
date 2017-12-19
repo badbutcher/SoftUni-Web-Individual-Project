@@ -9,9 +9,9 @@
     {
         Task<Dictionary<Race, List<string>>> GetAllBuildingsFormAsync();
 
-        Task CreateUnitAsync(string name, Race race, int unlockLevel, int expWorth, int mineralCost, int gasCost, int health, int damage, string building, byte[] image);
+        Task CreateUnitAsync(string name, int unlockLevel, int expWorth, int mineralCost, int gasCost, int health, int damage, string building, byte[] image);
 
-        Task<bool> DoesUnitExistsAsync(string name, Race race);
+        Task<bool> DoesUnitExistsAsync(string name);
 
         Task<IEnumerable<BasicUnitInfoServiceModel>> AllUnitsAsync();
 

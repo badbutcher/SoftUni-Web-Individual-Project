@@ -6,6 +6,7 @@
     using StarCraft.Data.Models;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Web.Areas.Admin.Models.Users;
+    using StarCraft.Web.Infrastructure.Extensions;
     using static StarCraft.Services.ServiceConstants;
 
     public class UsersController : AdminBaseController
@@ -31,6 +32,24 @@
 
         public async Task<IActionResult> AddUserResources(string userId, int minerals, int gas)
         {
+            User user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                TempData.AddErrorMessage("User not found.");
+                return this.RedirectToAction(nameof(this.AllUsers));
+            }
+
+            if (minerals <= 0)
+            {
+                minerals = 0;
+            }
+
+            if (gas <= 0)
+            {
+                gas = 0;
+            }
+
             await this.users.AddResourcesAsync(userId, minerals, gas);
 
             return this.RedirectToAction(nameof(this.AllUsers));

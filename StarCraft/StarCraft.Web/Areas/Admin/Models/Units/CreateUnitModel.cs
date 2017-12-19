@@ -13,9 +13,6 @@
         public string Name { get; set; }
 
         [Required]
-        public Race Race { get; set; }
-
-        [Required]
         [Range(MinItemUnlockLevel, MaxItemUnlockLevel)]
         public int UnlockLevel { get; set; }
 

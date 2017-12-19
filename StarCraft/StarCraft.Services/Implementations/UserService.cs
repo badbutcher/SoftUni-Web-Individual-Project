@@ -11,6 +11,7 @@
     using StarCraft.Services.Contracts;
     using StarCraft.Services.Models;
     using StarCraft.Web.Data;
+    using static StarCraft.Data.DataConstants;
 
     public class UserService : IUserService
     {
@@ -107,6 +108,7 @@
             }
 
             UnitUser unitQuantity = await this.db.FindAsync<UnitUser>(unitId, userId);
+
             var userUnits = await this.db.Users.Where(a => a.Id == userId).Select(c => c.Units).FirstOrDefaultAsync();
 
             if (!userUnits.Any() || unitQuantity == null)
@@ -211,24 +213,32 @@
             await this.GetUnits(userUnits);
             await this.GetUnits(enemyUnits);
             var battle = await this.StartBattle(userUnits, enemyUnits);
-            
+
             battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
-            battle.EnemyMineralsWon += battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
             battle.UserGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
-            battle.EnemyGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
 
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
-            user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
-            enemy.Minerals -= battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
-            user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
-            enemy.Gas -= battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
 
+            user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
+            if (user.Minerals > MaxUserMineralCapacity)
+            {
+                user.Minerals = MaxUserMineralCapacity;
+            }
+
+            user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
+            if (user.Gas > MaxUserGasCapacity)
+            {
+                user.Gas = MaxUserGasCapacity;
+            }
+
+            enemy.Minerals -= battle.UserTroopsLost.Sum(a => a.Value) * user.Level * enemy.Level;
             if (enemy.Minerals <= 0)
             {
                 enemy.Minerals = 0;
             }
 
+            enemy.Gas -= battle.EnemyTroopsLost.Sum(a => a.Value) * (user.Level + enemy.Level);
             if (enemy.Gas <= 0)
             {
                 enemy.Gas = 0;

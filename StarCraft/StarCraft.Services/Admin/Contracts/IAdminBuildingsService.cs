@@ -9,7 +9,7 @@
     {
         Task CreateBuildingAsync(string name, Race race, int unlockLevel, int mineralCost, int gasCost, byte[] image);
 
-        Task<bool> DoesBuildingExistsAsync(string name, Race race);
+        Task<bool> DoesBuildingExistsAsync(string name);
 
         Task<BuildingServiceModel> FindByIdAsync(int id);
 

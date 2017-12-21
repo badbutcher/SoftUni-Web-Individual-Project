@@ -93,7 +93,7 @@
                 return this.BadRequest();
             }
 
-            if (!(user.Race != unit.Race || user.Level > unit.UnlockLevel))
+            if (!(user.Race != unit.Race || user.Level >= unit.UnlockLevel))
             {
                 return this.BadRequest();
             }

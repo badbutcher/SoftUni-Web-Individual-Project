@@ -139,11 +139,6 @@
             return this.View(result);
         }
 
-        public IActionResult Home()
-        {
-            return this.View();
-        }
-
         private static string GetUserExp(User user)
         {
             string currentExp = "Max level";

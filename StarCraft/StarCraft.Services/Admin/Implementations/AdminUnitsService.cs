@@ -111,12 +111,12 @@
 
         public async Task<Dictionary<Race, List<string>>> GetAllBuildingsFormAsync()
         {
-            Dictionary<Race, List<string>> buildings = new Dictionary<Race, List<string>>();
-
-            buildings.Add(Race.Terran, await this.db.Buildings.Where(a => a.Race == Race.Terran).Select(c => c.Name).ToListAsync());
-            buildings.Add(Race.Zerg, await this.db.Buildings.Where(a => a.Race == Race.Zerg).Select(c => c.Name).ToListAsync());
-            buildings.Add(Race.Protoss, await this.db.Buildings.Where(a => a.Race == Race.Protoss).Select(c => c.Name).ToListAsync());
-            /// TODOTODO: is there a better way?
+            Dictionary<Race, List<string>> buildings = new Dictionary<Race, List<string>>
+            {
+                { Race.Terran, await this.db.Buildings.Where(a => a.Race == Race.Terran).Select(c => c.Name).ToListAsync() },
+                { Race.Zerg, await this.db.Buildings.Where(a => a.Race == Race.Zerg).Select(c => c.Name).ToListAsync() },
+                { Race.Protoss, await this.db.Buildings.Where(a => a.Race == Race.Protoss).Select(c => c.Name).ToListAsync() }
+            };
 
             return buildings;
         }

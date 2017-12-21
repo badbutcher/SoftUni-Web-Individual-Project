@@ -4,15 +4,15 @@ SELECT 'Command Center', 0, 400, 0, 0, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\61.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Barracks', 0, 150, 0, 0, BulkColumn 
+SELECT 'Barracks', 0, 150, 0, 2, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\60.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Academy', 0, 150, 0, 2, BulkColumn 
+SELECT 'Academy', 0, 150, 0, 3, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\183.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Factory', 0, 200, 100, 3, BulkColumn 
+SELECT 'Factory', 0, 200, 100, 4, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\191.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
@@ -30,19 +30,19 @@ SELECT 'Hatchery', 1, 300, 0, 0, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\280.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Spawning Pool', 1, 200, 0, 1, BulkColumn 
+SELECT 'Spawning Pool', 1, 200, 0, 2, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\300.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Hydralisk Den', 1, 100, 50, 2, BulkColumn 
+SELECT 'Hydralisk Den', 1, 100, 50, 3, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\295.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Spire', 1, 200, 150, 3, BulkColumn 
+SELECT 'Spire', 1, 200, 150, 4, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\290.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Queen''s Nest', 1, 150, 100, 4, BulkColumn 
+SELECT 'Queen''s Nest', 1, 150, 100, 5, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\293.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
@@ -59,15 +59,15 @@ SELECT 'Nexus', 2, 400, 0, 0, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\506.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Gateway', 2, 150, 0, 0, BulkColumn 
+SELECT 'Gateway', 2, 150, 0, 2, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\504.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Cybernetics Core', 2, 200, 0, 2, BulkColumn 
+SELECT 'Cybernetics Core', 2, 200, 0, 3, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\501.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
-SELECT 'Robotics Facility', 2, 200, 200, 3, BulkColumn 
+SELECT 'Robotics Facility', 2, 200, 200, 4, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\512.png', Single_Blob) as image
 
 INSERT INTO Buildings(Name, Race, MineralCost, GasCost, UnlockLevel, Image)
@@ -137,7 +137,6 @@ INSERT BuildingUnit(BuildingId, UnitId) VALUES (4, 7)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 8)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 9)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 10)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 1)
 
 -- Zerg units
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)

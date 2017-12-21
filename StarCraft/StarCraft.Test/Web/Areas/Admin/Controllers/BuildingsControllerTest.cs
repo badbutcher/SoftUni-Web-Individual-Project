@@ -1,5 +1,6 @@
 ﻿namespace StarCraft.Test.Web.Areas.Admin.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -9,13 +10,16 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
+    using Microsoft.EntityFrameworkCore;
     using Moq;
+    using StarCraft.Data.Models;
     using StarCraft.Data.Models.Enums;
     using StarCraft.Services.Admin.Contracts;
     using StarCraft.Services.Models;
     using StarCraft.Web;
     using StarCraft.Web.Areas.Admin.Controllers;
     using StarCraft.Web.Areas.Admin.Models.Buildings;
+    using StarCraft.Web.Data;
     using Xunit;
 
     public class BuildingsControllerTest
@@ -175,6 +179,51 @@
             result.As<RedirectToActionResult>().ControllerName.Should().Be("Home");
             result.As<RedirectToActionResult>().RouteValues.Keys.Should().Contain("area");
             result.As<RedirectToActionResult>().RouteValues.Values.Should().Contain(string.Empty);
+        }
+
+        private StarCraftDbContext GetDatabase()
+        {
+            var databaseOptions = new DbContextOptionsBuilder<StarCraftDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+
+            return new StarCraftDbContext(databaseOptions);
+        }
+
+        private IEnumerable<Building> TestDataBuildings()
+        {
+            var sessions = new List<Building>
+            {
+                new Building()
+                {
+                    Id = 1,
+                    Name = "Factory",
+                    Race = Race.Terran,
+                    MineralCost = 100,
+                    GasCost = 0,
+                    Image = new byte[100]
+                },
+                new Building()
+                {
+                    Id = 2,
+                    Name = "Spawning pool",
+                    Race = Race.Zerg,
+                    MineralCost = 200,
+                    GasCost = 0,
+                    Image = new byte[100]
+                },
+                new Building()
+                {
+                    Id = 3,
+                    Name = "Nexus",
+                    Race = Race.Protoss,
+                    MineralCost = 200,
+                    GasCost = 200,
+                    Image = new byte[100]
+                }
+            };
+
+            return sessions;
         }
 
         private IEnumerable<BasicBuildingInfoServiceModel> TestData()

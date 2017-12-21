@@ -64,7 +64,6 @@
 
             // Act
             string name = "Medic";
-            Race race = Race.Terran;
             int unlockLevel = 2;
             int mineralCost = 100;
             int gasCost = 0;
@@ -73,7 +72,7 @@
             int expWorth = 5;
             byte[] image = new byte[100];
 
-            await adminUnitsService.CreateUnitAsync(name, race, unlockLevel, expWorth, mineralCost, gasCost, health, damage, "Bunker", image);
+            await adminUnitsService.CreateUnitAsync(name, unlockLevel, expWorth, mineralCost, gasCost, health, damage, "Bunker", image);
 
             // Assert
             db.Units.Should().HaveCount(1);

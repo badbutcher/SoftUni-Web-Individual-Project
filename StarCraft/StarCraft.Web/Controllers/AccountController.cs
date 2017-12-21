@@ -18,7 +18,7 @@
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private const int StartingMinerals = 250;
+        private const int StartingMinerals = 1000;
         private const int StartingGas = 0;
 
         private readonly UserManager<User> userManager;
@@ -116,8 +116,8 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = 500000, /// TODOTODO
-                    Gas = 5000000, /// TODOTODO
+                    Minerals = StartingMinerals,
+                    Gas = StartingGas,
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };
@@ -219,8 +219,8 @@
                     UserName = model.Email,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = 0, /// TODOTODO
-                    Gas = 0, /// TODOTODO
+                    Minerals = StartingMinerals,
+                    Gas = StartingGas,
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };

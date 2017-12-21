@@ -25,22 +25,33 @@
     }
 </div>
 
+<div class="row darkBackground">
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+        <img width="20" src="~/images/Minerals.png" /><div id="sumM">0</div>
+    </div>
+    <div class="col-md-1">
+        <img width="20" src="~/images/Gas.png" /><div id="sumG">0</div>
+    </div>
+    <div class="col-md-5"></div>
+</div>
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Mineral cost</th>
-            <th>Gas cost</th>
-            <th>Health</th>
-            <th>Damage</th>
-            <th></th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Mineral cost</th>
+            <th class="text-center">Gas cost</th>
+            <th class="text-center">Health</th>
+            <th class="text-center">Damage</th>
+            <th class="text-center"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var unit in Model.Units)
         {
-            <tr>
+            <tr class="text-center">
                 <th class="col-md-1"><img src="data:image;base64,@Convert.ToBase64String(unit.Image)" width="50" height="50" /></th>
                 <td class="col-md-1">@unit.Name</td>
                 <td class="col-md-1">@unit.MineralCost</td>
@@ -48,8 +59,8 @@
                 <td class="col-md-1">@unit.Health</td>
                 <td class="col-md-1">@unit.Damage</td>
                 <td class="col-md-3">
-                    <form method="post" class="form-inline" asp-route-unitid="@unit.Id" asp-route-quantity="@unit.Quantity">
-                        <select name="Quantity" class="form-control">
+                    <form method="post" asp-route-unitid="@unit.Id" asp-route-quantity="@unit.Quantity">
+                        <select name="Quantity" onchange='MineralsSum(this.value * @unit.MineralCost); GasSum(this.value * @unit.GasCost)' class="form-control">
                             <option value="1">1</option>
                             <option value="5">5</option>
                             <option value="10">10</option>

@@ -13,7 +13,6 @@
     using StarCraft.Services.Contracts;
     using StarCraft.Web.Models.AccountViewModels;
     using static StarCraft.Data.DataConstants;
-    using static WebConstants;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -46,7 +45,6 @@
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             this.ViewData["ReturnUrl"] = returnUrl;
@@ -61,8 +59,6 @@
             this.ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account this.Lockout
-                // To enable password failures to trigger account this.Lockout, set lockoutOnFailure: true
                 var result = await this.signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -81,8 +77,7 @@
                     return this.View(model);
                 }
             }
-
-            // If we got this far, something failed, redisplay form
+            
             return this.View(model);
         }
 
@@ -154,7 +149,6 @@
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
-            // Request a redirect to the external login provider.
             var redirectUrl = Url.Action(nameof(this.ExternalLoginCallback), "Account", new { returnUrl });
             var properties = this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return this.Challenge(properties, provider);
@@ -175,8 +169,7 @@
             {
                 return this.RedirectToAction(nameof(this.Login));
             }
-
-            // Sign in the user with this external login provider if the user already has a login.
+            
             var result = await this.signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
@@ -190,7 +183,6 @@
             }
             else
             {
-                // If the user does not have an account, then ask the user to create an account.
                 this.ViewData["ReturnUrl"] = returnUrl;
                 this.ViewData["LoginProvider"] = info.LoginProvider;
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
@@ -205,7 +197,6 @@
         {
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
                 var info = await this.signInManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
@@ -277,7 +268,6 @@
             var user = await this.userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
                 return this.RedirectToAction(nameof(this.ResetPasswordConfirmation));
             }
 

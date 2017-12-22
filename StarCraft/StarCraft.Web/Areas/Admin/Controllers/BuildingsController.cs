@@ -65,7 +65,7 @@
 
             TempData.AddSuccessMessage($"Building {buildingsModel.Name} created successfully!");
 
-            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -106,7 +106,7 @@
             if (found)
             {
                 TempData.AddErrorMessage(BuildingExistsMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             byte[] fileContents = await image.ToByteArrayAsync();
@@ -157,7 +157,7 @@
             if (!delete)
             {
                 ModelState.AddModelError(string.Empty, BuildingNotFoundMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             return this.RedirectToAction(nameof(this.AllBuildings));
@@ -166,7 +166,7 @@
         private IActionResult NullBuildingGoToHome()
         {
             TempData.AddErrorMessage(BuildingNotFoundMessage);
-            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
         }
     }
 }

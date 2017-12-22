@@ -16,5 +16,7 @@
 
         public const string UnitExistsMessage = "This unit exists.";
         public const string UnitNotFoundMessage = "The unit was not found.";
+
+        public const string HomeControllerName = "Home";
     }
 }

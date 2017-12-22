@@ -74,7 +74,7 @@
 
             TempData.AddSuccessMessage($"Unit {unitModel.Name} created successfully!");
 
-            return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+            return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -84,7 +84,7 @@
             if (unit == null)
             {
                 ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             return this.View(new UnitServiceModel
@@ -113,7 +113,7 @@
             if (unit == null)
             {
                 ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             var found = await this.units.DoesUnitExistsAsync(model.Name);
@@ -121,7 +121,7 @@
             if (found)
             {
                 TempData.AddErrorMessage(UnitExistsMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             byte[] fileContents = await image.ToByteArrayAsync();
@@ -143,7 +143,7 @@
             if (unit == null)
             {
                 ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             return this.View(new DeleteUnitModel
@@ -170,7 +170,7 @@
             if (building == null)
             {
                 ModelState.AddModelError(string.Empty, UnitNotFoundMessage);
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             await this.units.DeleteAsync(id);

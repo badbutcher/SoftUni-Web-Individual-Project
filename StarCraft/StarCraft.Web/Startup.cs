@@ -12,7 +12,6 @@
     using StarCraft.Data.Models;
     using StarCraft.Web.Data;
     using StarCraft.Web.Infrastructure.Extensions;
-    using StarCraft.Web.Infrastructure.Seeds;
 
     public class Startup
     {
@@ -62,7 +61,7 @@
         {
             app.UseDatabaseMigration();
 
-            app.SeedUsers(); //Seeds random users
+            //app.SeedUsers(); //Seeds random users
 
             if (env.IsDevelopment())
             {

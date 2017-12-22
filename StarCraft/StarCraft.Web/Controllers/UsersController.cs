@@ -12,6 +12,7 @@
     using StarCraft.Web.Infrastructure.Extensions;
     using StarCraft.Web.Models.Buildings;
     using StarCraft.Web.Models.UsersViewModels;
+    using static WebConstants;
 
     [Authorize]
     public class UsersController : Controller
@@ -114,7 +115,7 @@
             {
                 TempData.AddErrorMessage("No enemies found or you don't have enough troops.");
 
-                return this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = string.Empty });
+                return this.RedirectToAction(nameof(HomeController.Index), HomeControllerName, new { area = string.Empty });
             }
 
             return this.View(new BattleServiceModel

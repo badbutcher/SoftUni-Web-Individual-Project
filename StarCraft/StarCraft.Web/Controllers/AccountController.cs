@@ -13,14 +13,12 @@
     using StarCraft.Services.Contracts;
     using StarCraft.Web.Models.AccountViewModels;
     using static StarCraft.Data.DataConstants;
+    using static WebConstants;
 
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private const int StartingMinerals = 1000;
-        private const int StartingGas = 0;
-
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly ILogger logger;
@@ -116,8 +114,8 @@
                     UserName = model.Username,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = StartingMinerals,
-                    Gas = StartingGas,
+                    Minerals = UserStartingMinerals,
+                    Gas = UserStartingGas,
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };
@@ -219,8 +217,8 @@
                     UserName = model.Email,
                     Email = model.Email,
                     Race = model.Race,
-                    Minerals = StartingMinerals,
-                    Gas = StartingGas,
+                    Minerals = UserStartingMinerals,
+                    Gas = UserStartingGas,
                     Level = UserStartLevel,
                     CurrentExp = UserStartExp
                 };

@@ -214,19 +214,19 @@
             await this.GetUnits(enemyUnits);
             var battle = await this.StartBattle(userUnits, enemyUnits);
 
-            battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
-            battle.UserGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
+            battle.UserMineralsWon += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level * 7;
+            battle.UserGasWon += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level) * 3;
 
             user.CurrentExp += battle.UserXpWon;
             enemy.CurrentExp += battle.EnemyXpWon;
 
-            user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level;
+            user.Minerals += battle.EnemyTroopsLost.Sum(a => a.Value) * enemy.Level * user.Level * 7;
             if (user.Minerals > MaxUserMineralCapacity)
             {
                 user.Minerals = MaxUserMineralCapacity;
             }
 
-            user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level);
+            user.Gas += battle.EnemyTroopsLost.Sum(a => a.Value) * (enemy.Level + user.Level) * 3;
             if (user.Gas > MaxUserGasCapacity)
             {
                 user.Gas = MaxUserGasCapacity;

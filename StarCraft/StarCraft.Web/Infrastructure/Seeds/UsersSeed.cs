@@ -34,21 +34,30 @@
 
                             if (user.Race == Race.Terran)
                             {
-                                user.Units.Add(new UnitUser() { UnitId = 3, UserId = user.Id, Quantity = (j + 4) * 3 });
-                                user.Units.Add(new UnitUser() { UnitId = 5, UserId = user.Id, Quantity = (j + 3) * 2 });
-                                user.Units.Add(new UnitUser() { UnitId = 6, UserId = user.Id, Quantity = j + 2 });
+                                user.Units.Add(new UnitUser() { UnitId = 1, UserId = user.Id, Quantity = (j + 3) * 3 });
+                                if (user.Level >= 2)
+                                {
+                                    user.Units.Add(new UnitUser() { UnitId = 3, UserId = user.Id, Quantity = (j + 2) * 2 });
+                                    user.Units.Add(new UnitUser() { UnitId = 5, UserId = user.Id, Quantity = j });
+                                }
                             }
                             else if (user.Race == Race.Zerg)
                             {
-                                user.Units.Add(new UnitUser() { UnitId = 12, UserId = user.Id, Quantity = (j + 4) * 3 });
-                                user.Units.Add(new UnitUser() { UnitId = 14, UserId = user.Id, Quantity = (j + 3) * 2 });
-                                user.Units.Add(new UnitUser() { UnitId = 17, UserId = user.Id, Quantity = j + 2 });
+                                user.Units.Add(new UnitUser() { UnitId = 11, UserId = user.Id, Quantity = (j + 3) * 3 });
+                                if (user.Level >= 2)
+                                {
+                                    user.Units.Add(new UnitUser() { UnitId = 13, UserId = user.Id, Quantity = (j + 2) * 2 });
+                                    user.Units.Add(new UnitUser() { UnitId = 15, UserId = user.Id, Quantity = j });
+                                }
                             }
                             else if (user.Race == Race.Protoss)
                             {
-                                user.Units.Add(new UnitUser() { UnitId = 21, UserId = user.Id, Quantity = (j + 4) * 3 });
-                                user.Units.Add(new UnitUser() { UnitId = 23, UserId = user.Id, Quantity = (j + 3) * 2 });
-                                user.Units.Add(new UnitUser() { UnitId = 26, UserId = user.Id, Quantity = j + 2 });
+                                user.Units.Add(new UnitUser() { UnitId = 19, UserId = user.Id, Quantity = (j + 3) * 3 });
+                                if (user.Level >= 2)
+                                {
+                                    user.Units.Add(new UnitUser() { UnitId = 21, UserId = user.Id, Quantity = (j + 2) * 2 });
+                                    user.Units.Add(new UnitUser() { UnitId = 23, UserId = user.Id, Quantity = j });
+                                }
                             }
 
                             IdentityResult result = await userManager.CreateAsync(user, $"UserName{i}{j}");

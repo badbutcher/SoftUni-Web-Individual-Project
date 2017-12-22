@@ -88,49 +88,49 @@ FROM Openrowset( Bulk 'C:\StarCraftSprites\516.png', Single_Blob) as image
 
 -- Terran units
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'SCV', 0, 50, 0, 60, 5, 0, 1, BulkColumn 
+SELECT 'SCV', 0, 50, 0, 60, 5, 0, 4, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\7.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Marine', 0, 50, 0, 40, 7, 0, 1, BulkColumn 
+SELECT 'Marine', 0, 50, 0, 40, 7, 0, 3, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\32.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Firebat', 0, 50, 25, 60, 9, 1, 2, BulkColumn 
+SELECT 'Firebat', 0, 50, 25, 60, 9, 1, 5, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\94.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Ghost', 0, 25, 75, 45, 11, 2, 3, BulkColumn 
+SELECT 'Ghost', 0, 25, 75, 45, 11, 2, 7, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\57.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Vulture', 0, 75, 0, 80, 22, 3, 4, BulkColumn 
+SELECT 'Vulture', 0, 75, 0, 80, 22, 3, 8, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\77.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Siege Tank', 0, 150, 100, 170, 40, 4, 5, BulkColumn 
+SELECT 'Siege Tank', 0, 150, 100, 170, 40, 4, 10, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Tank.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Goliath', 0, 100, 50, 145, 26, 4, 5, BulkColumn 
+SELECT 'Goliath', 0, 100, 50, 145, 26, 4, 10, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Goliath.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Wraith', 0, 150, 100, 120, 32, 5, 6, BulkColumn 
+SELECT 'Wraith', 0, 150, 100, 120, 32, 5, 11, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\116.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Battlecruiser', 0, 400, 300, 590, 260, 7, 8, BulkColumn 
+SELECT 'Battlecruiser', 0, 400, 300, 590, 260, 7, 14, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\172.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Valkyrie', 0, 250, 125, 260, 58, 7, 6, BulkColumn 
+SELECT 'Valkyrie', 0, 250, 125, 260, 58, 7, 15, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\147.png', Single_Blob) as image
 
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (1, 1)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (2, 2)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (2, 3)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (2, 4)
+INSERT BuildingUnit(BuildingId, UnitId) VALUES (3, 3)
+INSERT BuildingUnit(BuildingId, UnitId) VALUES (3, 4)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (4, 5)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (4, 6)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (4, 7)
@@ -140,35 +140,35 @@ INSERT BuildingUnit(BuildingId, UnitId) VALUES (5, 10)
 
 -- Zerg units
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Drone', 1, 50, 0, 40, 5, 0, 1, BulkColumn
+SELECT 'Drone', 1, 50, 0, 40, 5, 0, 4, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Drone.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Zergling', 1, 25, 0, 35, 6, 0, 1, BulkColumn 
+SELECT 'Zergling', 1, 25, 0, 35, 6, 0, 5, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\210.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Hydralisk', 1, 75, 25, 80, 11, 2, 2, BulkColumn 
+SELECT 'Hydralisk', 1, 75, 25, 80, 11, 2, 6, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\203.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Ultralisk', 1, 200, 200, 450, 23, 6, 8, BulkColumn 
+SELECT 'Ultralisk', 1, 200, 200, 450, 23, 6, 10, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\230.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Mutalisk', 1, 100, 100, 120, 16, 4, 6, BulkColumn 
+SELECT 'Mutalisk', 1, 100, 100, 120, 16, 4, 12, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\225.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Scourge', 1, 25, 75, 25, 50, 5, 5, BulkColumn
+SELECT 'Scourge', 1, 25, 75, 25, 50, 5, 12, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Scourge.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Guardian', 1, 150, 200, 200, 25, 5, 6, BulkColumn 
+SELECT 'Guardian', 1, 150, 200, 200, 25, 5, 14, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\242.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Devourer', 1, 250, 150, 280, 30, 7, 8, BulkColumn 
+SELECT 'Devourer', 1, 250, 150, 280, 30, 7, 16, BulkColumn 
 FROM Openrowset( Bulk 'C:\StarCraftSprites\269.png', Single_Blob) as image
 
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (7, 11)
@@ -182,42 +182,42 @@ INSERT BuildingUnit(BuildingId, UnitId) VALUES (12, 14)
 
 -- Protoss units
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Probe', 2, 50, 0, 40, 5, 0, 1, BulkColumn
+SELECT 'Probe', 2, 50, 0, 40, 5, 0, 4, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\381.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Zealot', 2, 100, 0, 170, 18, 0, 2, BulkColumn
+SELECT 'Zealot', 2, 100, 0, 170, 18, 0, 4, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\358.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Dragoon', 2, 125, 50, 190, 32, 2, 3, BulkColumn
+SELECT 'Dragoon', 2, 125, 50, 190, 32, 2, 5, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\306.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Dark Templar', 2, 125, 100, 100, 50, 3, 4, BulkColumn
+SELECT 'Dark Templar', 2, 125, 100, 100, 50, 3, 7, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Dark Templar.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Reaver', 2, 300, 150, 170, 75, 3, 4, BulkColumn
+SELECT 'Reaver', 2, 300, 150, 170, 75, 3, 8, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\413.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Archon', 2, 100, 400, 450, 35, 6, 6, BulkColumn
+SELECT 'Archon', 2, 100, 400, 450, 35, 6, 9, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Archon.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Scout', 2, 275, 125, 250, 30, 5, 5, BulkColumn
+SELECT 'Scout', 2, 275, 125, 250, 30, 5, 11, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\Scout.png', Single_Blob) as image
 
 INSERT INTO Units(Name, Race, MineralCost, GasCost, Health, Damage, UnlockLevel, ExpWorth, Image)
-SELECT 'Carrier', 2, 550, 250, 600, 12, 7, 7, BulkColumn
+SELECT 'Carrier', 2, 550, 250, 600, 12, 7, 12, BulkColumn
 FROM Openrowset( Bulk 'C:\StarCraftSprites\429.png', Single_Blob) as image
 
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (14, 19)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (15, 20)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (16, 21)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (18, 25)
+INSERT BuildingUnit(BuildingId, UnitId) VALUES (17, 25)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (18, 26)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (19, 23)
-INSERT BuildingUnit(BuildingId, UnitId) VALUES (21, 22)
+INSERT BuildingUnit(BuildingId, UnitId) VALUES (20, 22)
 INSERT BuildingUnit(BuildingId, UnitId) VALUES (21, 24)

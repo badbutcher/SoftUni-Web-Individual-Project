@@ -35,7 +35,7 @@
         public const int UserMinLevel = 0;
         public const int UserMaxLevel = 11;
 
-        public const int UserStartingMinerals = 250;
+        public const int UserStartingMinerals = 2500;
         public const int UserStartingGas = 0;
 
         // Unit constants
